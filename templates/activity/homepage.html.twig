@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12">
+                <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
+                    <a href="{{ path('new_activity') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
+                </div>
+                <h1>Activitatile dumneavoastra</h1>
+                    <table class="table">
+                    <tr>
+                        <td scope="col">#</td>
+                        <th scope="col">Name</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    {%  set i = 0 %}
+                    {%  for activity in activities %}
+                        {%  set i = i + 1 %}
+                        <tr>
+                            <th scope="row">{{ i }}</th>
+                            <td >{{ activity }}</td>
+                            <td>{{ activity.log }}</td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
