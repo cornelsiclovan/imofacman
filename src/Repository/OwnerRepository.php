@@ -19,6 +19,12 @@ class OwnerRepository extends ServiceEntityRepository
         parent::__construct($registry, Owner::class);
     }
 
+
+    public function createAlphabeticalQueryBuilder()
+    {
+        return $this->createQueryBuilder('owner')
+            ->orderBy('owner.name', 'ASC');
+    }
 //    /**
 //     * @return Owner[] Returns an array of Owner objects
 //     */

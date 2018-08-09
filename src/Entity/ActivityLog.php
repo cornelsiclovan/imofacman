@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ActivityLogRepository")
@@ -18,17 +19,10 @@ class ActivityLog
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $publishedAt;
+
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Staff", inversedBy="activityLogs")
-     */
-    private $staff;
-
-    /**
+     * @Assert\NotBlank()
      * @ORM\ManyToMany(targetEntity="App\Entity\Owner", inversedBy="activityLogs")
      */
     private $owner;
@@ -39,28 +33,44 @@ class ActivityLog
     private $intern;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $log;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Range(min=0, minMessage="Va rugam introduceti o valoare pozitiva")
+     * @ORM\Column(type="float", length=10)
      */
     private $duration;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $details;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $lunchBreak;
 
+    /**
+     * @Assert\NotBlank()
+     * @ORM\ManyToOne(targetEntity="App\Entity\Staff", inversedBy="activityLogs")
+     */
+    private $staff;
+
+    /**
+     * @Assert\NotBlank()
+     * @ORM\Column(type="date")
+     */
+    private $publishedAt;
+
     public function __construct()
     {
-        $this->staff = new ArrayCollection();
         $this->owner = new ArrayCollection();
     }
 
@@ -69,45 +79,18 @@ class ActivityLog
         return $this->id;
     }
 
-    public function getPublishedAt(): ?\DateTimeInterface
-    {
-        return $this->publishedAt;
-    }
 
-    public function setPublishedAt(\DateTimeInterface $publishedAt): self
-    {
-        $this->publishedAt = $publishedAt;
-
-        return $this;
-    }
 
     /**
-     * @return Collection|Staff[]
-     */
-    public function getStaff(): Collection
-    {
-        return $this->staff;
-    }
-
-    public function addStaff(Staff $staff): self
-    {
-        if (!$this->staff->contains($staff)) {
-            $this->staff[] = $staff;
-        }
-
-        return $this;
-    }
-
-    public function removeStaff(Staff $staff): self
-    {
-        if ($this->staff->contains($staff)) {
-            $this->staff->removeElement($staff);
-        }
-
-        return $this;
-    }
-
-    /**
+     * @Assert\Collection(
+     *     fields={
+                "0" = @Assert\NotBlank()
+     *
+*          },
+     *     allowMissingFields=false,
+     *     allowExtraFields=true
+     *
+     * )
      * @return Collection|Owner[]
      */
     public function getOwner(): Collection
@@ -157,12 +140,12 @@ class ActivityLog
         return $this;
     }
 
-    public function getDuration(): ?string
+    public function getDuration(): ?float
     {
         return $this->duration;
     }
 
-    public function setDuration(string $duration): self
+    public function setDuration(float $duration): self
     {
         $this->duration = $duration;
 
@@ -189,6 +172,35 @@ class ActivityLog
     public function setLunchBreak(string $lunchBreak): self
     {
         $this->lunchBreak = $lunchBreak;
+
+        return $this;
+    }
+
+    public function getStaff(): ?Staff
+    {
+        return $this->staff;
+    }
+
+    public function setStaff(?Staff $staff): self
+    {
+        $this->staff = $staff;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getStaff()->getName();
+    }
+
+    public function getPublishedAt(): ?\DateTimeInterface
+    {
+        return $this->publishedAt;
+    }
+
+    public function setPublishedAt(\DateTimeInterface $publishedAt = null): self
+    {
+        $this->publishedAt = $publishedAt;
 
         return $this;
     }

@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ parent() }}
     <div class="container">
         <div class="row">
 
@@ -13,19 +12,29 @@
                     <table class="table">
                     <tr>
                         <td scope="col">#</td>
-                        <th scope="col">Name</th>
-                        <th scope="col">City</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Data</th>
+                        <th scope="col">Nume</th>
+                        <th scope="col">Beneficiar</th>
+                        <th scope="col">Intern</th>
+                        <th scope="col">Lucrare</th>
+                        <th scope="col">Durata (ore)</th>
+                        <th scope="col">Observatii</th>
+                        <th scope="col">Pauza de masa</th>
                     </tr>
                     {%  set i = 0 %}
                     {%  for activity in activities %}
                         {%  set i = i + 1 %}
                         <tr>
                             <th scope="row">{{ i }}</th>
-                            <td >{{ activity }}</td>
+                            <td>{{ activity.publishedAt|date('Y-m-d') }}</td>
+                            <td>{{ activity }}</td>
+                            <td>{{ activity.owner|join(', ') }}</td>
+                            <td><input type="checkbox" {% if activity.intern == true %} checked {% endif %}/></td>
                             <td>{{ activity.log }}</td>
-
+                            <td>{{ activity.duration }}</td>
+                            <td>{{ activity.details }}</td>
+                            <td>{{ activity.lunchBreak }}</td>
+                            <td><a href="#" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
                         </tr>
                     {% endfor %}
                 </table>

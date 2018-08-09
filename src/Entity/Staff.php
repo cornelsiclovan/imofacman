@@ -39,9 +39,10 @@ class Staff
     private $staffType;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\ActivityLog", mappedBy="staff")
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityLog", mappedBy="staff")
      */
     private $activityLogs;
+
 
     public function __construct()
     {
@@ -101,6 +102,11 @@ class Staff
         return $this;
     }
 
+
+    public function __toString(){
+        return $this->getName();
+    }
+
     /**
      * @return Collection|ActivityLog[]
      */
@@ -113,7 +119,7 @@ class Staff
     {
         if (!$this->activityLogs->contains($activityLog)) {
             $this->activityLogs[] = $activityLog;
-            $activityLog->addStaff($this);
+            $activityLog->setStaff($this);
         }
 
         return $this;
@@ -123,13 +129,12 @@ class Staff
     {
         if ($this->activityLogs->contains($activityLog)) {
             $this->activityLogs->removeElement($activityLog);
-            $activityLog->removeStaff($this);
+            // set the owning side to null (unless already changed)
+            if ($activityLog->getStaff() === $this) {
+                $activityLog->setStaff(null);
+            }
         }
 
         return $this;
-    }
-
-    public function __toString(){
-        return $this->getName();
     }
 }

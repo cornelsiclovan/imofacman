@@ -41,7 +41,16 @@ class ActivityController extends AbstractController
         //only handles data on POST
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            dump($form->getData()); die;
+            $activityLog = $form->getData();
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($activityLog);
+            $em->flush();
+
+            $this->addFlash('success', 'Activitate adaugata!');
+
+            return $this->redirectToRoute('app_homepage');
         }
         return $this->render(
           'activity/new.html.twig',
