@@ -5,11 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StaffRepository")
  */
-class Staff
+class Staff implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -24,7 +25,7 @@ class Staff
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
     private $email;
 
@@ -136,5 +137,23 @@ class Staff
         }
 
         return $this;
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getSalt()
+    {
+    }
+
+    public function getUsername()
+    {
+       return $this->email;
+    }
+
+    public function eraseCredentials()
+    {
     }
 }
