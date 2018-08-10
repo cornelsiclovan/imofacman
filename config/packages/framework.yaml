@@ -32,3 +32,4 @@ framework:
     csrf_protection: ~
 
     validation: { enable_annotations: true }
+

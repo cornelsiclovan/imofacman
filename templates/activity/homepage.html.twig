@@ -34,7 +34,7 @@
                             <td>{{ activity.duration }}</td>
                             <td>{{ activity.details }}</td>
                             <td>{{ activity.lunchBreak }}</td>
-                            <td><a href="#" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
+                            <td><a href="{{ path('edit_activity', {'id': activity.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
                         </tr>
                     {% endfor %}
                 </table>

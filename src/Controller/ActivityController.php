@@ -36,7 +36,8 @@ class ActivityController extends AbstractController
     /**
      * @Route("/new", name="new_activity")
      */
-    public function newActivity(Request $request){
+    public function newActivity(Request $request)
+    {
         $form = $this->createForm(ActivityForm::class);
         //only handles data on POST
         $form->handleRequest($request);
@@ -56,6 +57,34 @@ class ActivityController extends AbstractController
           'activity/new.html.twig',
             [
               'activityForm' => $form->createView()
+            ]
+        );
+    }
+
+    /**
+     * @Route("/log/{id}/edit", name="edit_activity")
+     */
+    public function editActivity(Request $request, ActivityLog $activityLog)
+    {
+        $form = $this->createForm(ActivityForm::class, $activityLog);
+        //only handles data on POST
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $activityLog = $form->getData();
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($activityLog);
+            $em->flush();
+
+            $this->addFlash('success', 'Activitate modificata!');
+
+            return $this->redirectToRoute('app_homepage');
+        }
+        return $this->render(
+            'activity/edit.html.twig',
+            [
+                'activityForm' => $form->createView()
             ]
         );
     }
