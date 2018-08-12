@@ -69,9 +69,16 @@ class ActivityLog
      */
     private $publishedAt;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Property", inversedBy="activityLogs")
+     */
+    private $property;
+
+
     public function __construct()
     {
         $this->owner = new ArrayCollection();
+        $this->property = new ArrayCollection();
     }
 
     public function getId()
@@ -204,4 +211,31 @@ class ActivityLog
 
         return $this;
     }
+
+    /**
+     * @return Collection|Property[]
+     */
+    public function getProperty(): Collection
+    {
+        return $this->property;
+    }
+
+    public function addProperty(Property $property): self
+    {
+        if (!$this->property->contains($property)) {
+            $this->property[] = $property;
+        }
+
+        return $this;
+    }
+
+    public function removeProperty(Property $property): self
+    {
+        if ($this->property->contains($property)) {
+            $this->property->removeElement($property);
+        }
+
+        return $this;
+    }
+
 }

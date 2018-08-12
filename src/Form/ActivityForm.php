@@ -8,6 +8,7 @@
 
 namespace App\Form;
 use App\Entity\Owner;
+use App\Entity\Property;
 use App\Repository\OwnerRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -37,6 +38,10 @@ class ActivityForm extends AbstractType
                 'query_builder' => function(OwnerRepository $repo){
                     return $repo->createAlphabeticalQueryBuilder();
                 }
+            ])
+            ->add('property', EntityType::class,[
+                'multiple'=>true,
+                'class' => Property::class
             ])
             ->add('lunchBreak')
             ->add('publishedAt', DateType::class, [

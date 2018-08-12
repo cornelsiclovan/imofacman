@@ -34,6 +34,16 @@ class ActivityController extends AbstractController
     }
 
     /**
+     * @Route("/calendar", name="calendar_activity")
+     */
+    public function calendarActivity()
+    {
+        return $this->render(
+            'activity/calendar.html.twig'
+        );
+    }
+
+    /**
      * @Route("/new", name="new_activity")
      */
     public function newActivity(Request $request)

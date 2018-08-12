@@ -14,7 +14,8 @@
                         <td scope="col">#</td>
                         <th scope="col">Data</th>
                         <th scope="col">Nume</th>
-                        <th scope="col">Beneficiar</th>
+                        <th scope="col">Beneficiari</th>
+                        <th scope="col">Locatii</th>
                         <th scope="col">Intern</th>
                         <th scope="col">Lucrare</th>
                         <th scope="col">Durata (ore)</th>
@@ -28,6 +29,7 @@
                             <th scope="row">{{ i }}</th>
                             <td>{{ activity.publishedAt|date('Y-m-d') }}</td>
                             <td>{{ activity }}</td>
+                            <td>{{ activity.property|join(', ') }}</td>
                             <td>{{ activity.owner|join(', ') }}</td>
                             <td><input type="checkbox" {% if activity.intern == true %} checked {% endif %}/></td>
                             <td>{{ activity.log }}</td>
