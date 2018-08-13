@@ -19,12 +19,22 @@ class ActivityController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function homepage(EntityManagerInterface $em)
+    public function homepage()
+    {
+        return $this->render(
+            'start/start.html.twig'
+        );
+    }
+
+    /**
+     * @Route("/activity/list/", name="user_activity_list")
+     */
+    public function showActivityList(EntityManagerInterface $em)
     {
         $repository = $em->getRepository(ActivityLog::class);
 
-        $activities = $repository->findAll();
-        /** @var ActivityLog[] */
+        $activities = $repository->findLogsByUserId($this->getUser());
+
         return $this->render(
             'activity/homepage.html.twig',
             [
@@ -33,8 +43,9 @@ class ActivityController extends AbstractController
         );
     }
 
+
     /**
-     * @Route("/calendar", name="calendar_activity")
+     * @Route("/activity/calendar", name="calendar_activity")
      */
     public function calendarActivity()
     {
@@ -44,7 +55,7 @@ class ActivityController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="new_activity")
+     * @Route("/activity/new", name="new_activity")
      */
     public function newActivity(Request $request)
     {
@@ -59,20 +70,23 @@ class ActivityController extends AbstractController
             $em->persist($activityLog);
             $em->flush();
 
-            $this->addFlash('success', 'Activitate adaugata!');
-
-            return $this->redirectToRoute('app_homepage');
+            $this->addFlash(
+                'success',
+                sprintf('Activitate adaugata!, %s', $this->getUser()->getUserName())
+            );
+            return $this->redirectToRoute('user_activity_list');
         }
         return $this->render(
           'activity/new.html.twig',
             [
-              'activityForm' => $form->createView()
+              'activityForm' => $form->createView(),
+                'bla' => $this->getUser()
             ]
         );
     }
 
     /**
-     * @Route("/log/{id}/edit", name="edit_activity")
+     * @Route("/activity/log/{id}/edit", name="edit_activity")
      */
     public function editActivity(Request $request, ActivityLog $activityLog)
     {
@@ -87,9 +101,13 @@ class ActivityController extends AbstractController
             $em->persist($activityLog);
             $em->flush();
 
-            $this->addFlash('success', 'Activitate modificata!');
+            $this->addFlash(
+                'success',
+                sprintf('Activitate modificata, %s!', $this->getUser())
 
-            return $this->redirectToRoute('app_homepage');
+            );
+
+            return $this->redirectToRoute('user_activity_list');
         }
         return $this->render(
             'activity/edit.html.twig',

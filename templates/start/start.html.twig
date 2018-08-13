@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            {% if is_granted('ROLE_USER')%}
+                <h1>Sunteti logat ca utilizator: {{ app.user ? app.user.name }}. Va rugam introduceti datele dumneavoastra <a href="{{ path('calendar_activity') }}">aici</a>.</h1>
+            {% elseif is_granted('ROLE_ADMIN')%}
+                <h1>Sunteti logat ca administrator {{ app.user ? app.user.name }}. Va rugam introduceti datele dumneavoastra <a href="{{ path('calendar_activity') }}">aici</a>.</h1>
+            {% else %}
+                <h1>Va rugam sa va <a href="{{ path('security_login') }}">logati</a>.</h1>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

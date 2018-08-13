@@ -22,19 +22,17 @@ class ActivityLogRepository extends ServiceEntityRepository
 //    /**
 //     * @return ActivityLog[] Returns an array of ActivityLog objects
 //     */
-    /*
-    public function findByExampleField($value)
+    public function findLogsByUserId($value)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
+            ->andWhere('a.staff = :val')
             ->setParameter('val', $value)
             ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+            ->setMaxResults(100)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?ActivityLog

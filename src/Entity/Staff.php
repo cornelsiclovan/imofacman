@@ -34,10 +34,17 @@ class Staff implements UserInterface
      */
     private $password;
 
+    private $plainPassword;
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\StaffType", inversedBy="staff")
      */
     private $staffType;
+
+    /**
+     * @ORM\Column(type="json_array")
+     */
+    private $roles = [];
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ActivityLog", mappedBy="staff")
@@ -75,18 +82,6 @@ class Staff implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
 
         return $this;
     }
@@ -141,7 +136,29 @@ class Staff implements UserInterface
 
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        $roles = $this->roles;
+        if(!in_array('ROLE_USER', $roles)){
+            $roles[] = 'ROLE_USER';
+        }
+
+        return $roles;
+    }
+
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
     public function getSalt()
@@ -155,5 +172,21 @@ class Staff implements UserInterface
 
     public function eraseCredentials()
     {
+        $this->plainPassword = null;
     }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+        //guarantees that the entity looks dirty to Doctrine
+        //when changing the plainPassword
+        $this->password = null;
+    }
+
+
 }

@@ -19,6 +19,12 @@ class StaffTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, StaffType::class);
     }
 
+
+    public function createAlphabeticalQueryBuilder()
+    {
+        return $this->createQueryBuilder('staff_type')
+            ->orderBy('staff_type.type', 'ASC');
+    }
 //    /**
 //     * @return StaffType[] Returns an array of StaffType objects
 //     */
