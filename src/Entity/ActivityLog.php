@@ -58,7 +58,6 @@ class ActivityLog
     private $lunchBreak;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="App\Entity\Staff", inversedBy="activityLogs")
      */
     private $staff;

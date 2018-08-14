@@ -30,7 +30,6 @@ class ActivityForm extends AbstractType
             ->add('log')
             ->add('duration')
             ->add('details')
-            ->add('staff')
             ->add('owner',EntityType::class,[
                 'multiple' => true,
                 'class'    => Owner::class,

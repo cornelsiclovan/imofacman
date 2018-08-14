@@ -65,6 +65,7 @@ class ActivityController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $activityLog = $form->getData();
 
+            $activityLog->setStaff($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($activityLog);
