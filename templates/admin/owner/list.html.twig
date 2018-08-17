@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12">
+                <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
+                    <a href="{{ path('admin_owner_new') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
+                </div>
+                <h1>Lista proprietari:</h1>
+                <table class="table">
+                    <tr>
+                        <td scope="col">#</td>
+                        <th scope="col">Nume</th>
+                        <th scope="col">Adresa</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Telefon</th>
+                    </tr>
+                    {%  set i = 0 %}
+                    {%  for owner in owners %}
+                        {%  set i = i + 1 %}
+                        <tr>
+                            <th scope="row">{{ i }}</th>
+                            <td><a href="{{ path('admin_activity_per_owner_list', {'id': owner.id}) }}">{{ owner }}</a></td>
+                            <td>{{ owner.address}}</td>
+                            <td>{{ owner.email }}</td>
+                            <td>{{ owner.telephone }}</td>
+                            <td><a href="{{ path('admin_owner_edit', {'id': owner.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

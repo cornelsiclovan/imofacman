@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12">
+                <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
+                    <a href="{{ path('new_activity') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
+                </div>
+                <h1>Raport pentru clientul : {{ owner }}</h1>
+                <table class="table">
+                    <tr>
+                        <td scope="col">#</td>
+                        <th scope="col">Data</th>
+                        <th scope="col">Departament</th>
+                        <th scope="col">Beneficiari</th>
+                        <th scope="col">Locatii</th>
+                        <th scope="col">Intern</th>
+                        <th scope="col">Lucrare</th>
+                        <th scope="col">Durata (ore)</th>
+                        <th scope="col">Observatii</th>
+                        <th scope="col">Pauza de masa</th>
+                    </tr>
+                    {%  set i = 0 %}
+                    {%  for log in owner.activityLogs %}
+                        {%  set i = i + 1 %}
+                        <tr>
+                            <th scope="row">{{ i }}</th>
+                            <td>{{ log.publishedAt|date('Y-m-d') }}</td>
+                            <td>{{ log.staff.staffType }}</td>
+                            <td>{{ owner}}</td>
+                            <td>{%  for p in log.property %}
+                                    {% if p in properties %}
+                                         {{ p }}
+                                    {% endif %}
+                                {%  endfor %}</td>
+                            <td><input type="checkbox" {% if log.intern == true %} checked {% endif %}/></td>
+                            <td>{{ log.log }}</td>
+                            <td>{{ log.duration }}</td>
+                            <td>{{ log.details }}</td>
+                            <td>{{ log.lunchBreak }}</td>
+                            <td><a href="{{ path('edit_activity', {'id': log.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

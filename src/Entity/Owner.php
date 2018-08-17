@@ -26,16 +26,19 @@ class Owner
     private $name;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $email;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $telephone;
 
     /**
+     *@Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $address;

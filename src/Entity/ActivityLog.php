@@ -212,6 +212,15 @@ class ActivityLog
     }
 
     /**
+     *  * @Assert\Collection(
+     *     fields={
+                 "0" = @Assert\NotBlank()
+     *
+     *          },
+     *     allowMissingFields=false,
+     *     allowExtraFields=true
+     *
+     * )
      * @return Collection|Property[]
      */
     public function getProperty(): Collection

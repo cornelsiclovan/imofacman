@@ -81,7 +81,6 @@ class ActivityController extends AbstractController
           'activity/new.html.twig',
             [
               'activityForm' => $form->createView(),
-                'bla' => $this->getUser()
             ]
         );
     }

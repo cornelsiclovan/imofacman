@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12">
+                <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
+                    <a href="{{ path('admin_property_new') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
+                </div>
+                <h1>Proprietati in administrare:</h1>
+                <table class="table">
+                    <tr>
+                        <td scope="col">#</td>
+                        <th scope="col">Nume</th>
+                        <th scope="col">Adresa</th>
+                        <th scope="col">Proprietar</th>
+                    </tr>
+                    {%  set i = 0 %}
+                    {%  for property in properties %}
+                        {%  set i = i + 1 %}
+                        <tr>
+                            <th scope="row">{{ i }}</th>
+                            <td>{{ property }}</td>
+                            <td>{{ property.address}}</td>
+                            <td>{{ property.owner }}</td>
+                            <td><a href="{{ path('admin_property_edit', {'id': property.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

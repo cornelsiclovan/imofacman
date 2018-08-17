@@ -30,10 +30,8 @@ class ActivityLogRepository extends ServiceEntityRepository
             ->orderBy('a.id', 'ASC')
             ->setMaxResults(100)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-
     /*
     public function findOneBySomeField($value): ?ActivityLog
     {

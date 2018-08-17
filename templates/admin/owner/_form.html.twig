@@ -1,0 +1,8 @@
+{{ form_start(ownerForm) }}
+    {{ form_row(ownerForm.name, {'label' : 'Denumire proprietar'}) }}
+    {{ form_row(ownerForm.address ,{'label': 'Adresa'}) }}
+    {{ form_row(ownerForm.email, {'label' : 'Email'}) }}
+    {{ form_row(ownerForm.telephone, {'label' : 'Telefon'}) }}
+
+<button type = "submit" class="btn btn-action" formnovalidate>{{ buttonText }}</button>
+{{ form_end(ownerForm) }}
