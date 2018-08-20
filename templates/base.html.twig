@@ -37,6 +37,7 @@
         <li role="presentation" class="{{ app.request.get('_route') == 'admin_property_list' ? 'active' }}"><a href="{{ path('admin_property_list') }}">Proprietăți</a></li>
         <li role="presentation" class="{{ app.request.get('_route') == 'admin_owner_list' ? 'active' }}"><a href="{{ path('admin_owner_list') }}">Proprietari</a></li>
         <li role="presentation" class="{{ app.request.get('_route') == 'user_activity_list' ? 'active' }}"><a href="{{ path('user_activity_list') }}">Log activități</a></li>
+        <li role="presentation" class="{{ app.request.get('_route') == 'admin_department_list' ? 'active' }}"><a href="{{ path('admin_department_list') }}">Departamente</a></li>
     </ul>
         {% elseif is_granted('ROLE_USER') %}
             <ul class="nav nav-pills">

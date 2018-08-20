@@ -11,6 +11,8 @@ use App\Entity\ActivityLog;
 use App\Entity\Owner;
 use App\Entity\Property;
 use App\Entity\Staff;
+use App\Entity\StaffType;
+use App\Form\DepartmentForm;
 use App\Form\OwnerForm;
 use App\Form\PropertyForm;
 use App\Form\StaffEditForm;
@@ -314,6 +316,81 @@ class ActivityAdminController extends AbstractController
         return $this->render(
             'admin/staff/passwordChange.html.twig',[
                 'staffPasswordChangeForm' => $form->createView()
+            ]
+        );
+    }
+
+    /**
+     * @Route("/department/list", name="admin_department_list")
+     */
+    public function listDepartment(EntityManagerInterface $em)
+    {
+        $repository = $em->getRepository(StaffType::class);
+        $staffType = $repository->findAll();
+        return $this->render(
+            'admin/departments/list.html.twig',[
+                'departments' => $staffType,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/department/new", name="admin_department_new")
+     */
+    public function newDepartment(Request $request)
+    {
+        $form = $this->createForm(DepartmentForm::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $staffType = $form->getData();
+
+            $this->listener->encodePassword($staffType);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($staffType);
+            $em->flush();
+
+
+
+            $this->addFlash(
+                'success',
+                sprintf('Personal adaugat!, %s', $this->getUser()->getUserName())
+            );
+            return $this->redirectToRoute('admin_department_list');
+        }
+
+        return $this->render(
+            'admin/staff/new.html.twig',[
+                'staffForm' => $form->createView()
+            ]
+        );
+    }
+
+    /**
+     * @Route("/department/{id}/edit", name="admin_department_edit")
+     */
+    public function editDepartment(Request $request, Staff $staff)
+    {
+        $form = $this->createForm(StaffEditForm::class, $staff);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $staff = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($staff);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                sprintf('Personal modificat!, %s', $this->getUser()->getUserName())
+            );
+            return $this->redirectToRoute('admin_staff_list');
+        }
+
+        return $this->render(
+            'admin/staff/edit.html.twig',[
+                'staffEditForm' => $form->createView()
             ]
         );
     }
