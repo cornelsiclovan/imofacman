@@ -1,0 +1,8 @@
+{{ form_start(staffEditForm) }}
+    {{ form_row(staffEditForm.name, {'label' : 'Nume'}) }}
+    {{ form_row(staffEditForm.email ,{'label': 'Email'}) }}
+    {{ form_row(staffEditForm.staffType, {'label' : 'Departament'}) }}
+    {{ form_row(staffEditForm.roles, {'label' : 'Roluri'}) }}
+
+<button type = "submit" class="btn btn-action" formnovalidate>{{ buttonText }}</button>
+{{ form_end(staffEditForm) }}

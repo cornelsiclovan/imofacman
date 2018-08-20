@@ -21,12 +21,13 @@ class Staff implements UserInterface
     private $id;
 
     /**
+     * @Assert\NotBlank(groups={"registration", "staff_edit"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"registration", "staff_edit"})
      * @Assert\Email()
      * @ORM\Column(type="string", length=50, unique=true)
      */
@@ -38,11 +39,12 @@ class Staff implements UserInterface
     private $password;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"registration", "password_reset"})
      */
     private $plainPassword;
 
     /**
+     * @Assert\NotBlank(groups={"registration", "staff_edit"})
      * @ORM\ManyToOne(targetEntity="App\Entity\StaffType", inversedBy="staff")
      */
     private $staffType;

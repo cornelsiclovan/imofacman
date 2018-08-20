@@ -2,45 +2,41 @@
 /**
  * Created by PhpStorm.
  * User: user
- * Date: 13.08.2018
- * Time: 14:28
+ * Date: 20.08.2018
+ * Time: 9:45
  */
 
 namespace App\Form;
-use App\Entity\Staff;
-use App\Entity\StaffType;
-use App\Repository\StaffTypeRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserRegistrationForm extends AbstractType
+class StaffForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name')
-            ->add('email', EmailType::class)
+            ->add('email')
+            ->add('staffType')
+            ->add('roles', ChoiceType::class, array(
+                'choices' => array(
+                    'Administrator' => 'ROLE_ADMIN',
+                    'Utilizator'    => 'ROLE_USER'
+                 ),
+                'multiple' => true,
+            ))
             ->add('plainPassword', RepeatedType::class, [
-               'type' => PasswordType::class
-            ])
-            ->add('staffType',EntityType::class,[
-                'class'    => StaffType::class,
-                'query_builder' => function(StaffTypeRepository $repo){
-                    return $repo->createAlphabeticalQueryBuilder();
-                }
+                'type' => PasswordType::class
             ]);
-
     }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Staff::class,
+            'data_class' => 'App\Entity\Staff',
             'validation_groups' => array('registration')
         ]);
     }

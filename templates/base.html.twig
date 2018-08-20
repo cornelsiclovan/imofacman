@@ -30,6 +30,23 @@
     </ul>
 </header>
 
+    {% if is_granted('ROLE_ADMIN')  %}
+    <ul class="nav nav-pills">
+        <li role="presentation" class="{{ app.request.get('_route') == 'calendar_activity' ? 'active' }}"><a href="{{ path('calendar_activity') }}">Acasă</a></li>
+        <li role="presentation" class="{{ app.request.get('_route') == 'admin_staff_list' ? 'active' }}"><a href="{{ path('admin_staff_list') }}">Personal</a></li>
+        <li role="presentation" class="{{ app.request.get('_route') == 'admin_property_list' ? 'active' }}"><a href="{{ path('admin_property_list') }}">Proprietăți</a></li>
+        <li role="presentation" class="{{ app.request.get('_route') == 'admin_owner_list' ? 'active' }}"><a href="{{ path('admin_owner_list') }}">Proprietari</a></li>
+        <li role="presentation" class="{{ app.request.get('_route') == 'user_activity_list' ? 'active' }}"><a href="{{ path('user_activity_list') }}">Log activități</a></li>
+    </ul>
+        {% elseif is_granted('ROLE_USER') %}
+            <ul class="nav nav-pills">
+                <li role="presentation" class="{{ app.request.get('_route') == 'calendar_activity' ? 'active' }}"><a href="{{ path('calendar_activity') }}">Acasă</a></li>
+                <li role="presentation" class="{{ app.request.get('_route') == 'user_activity_list' ? 'active' }}"><a href="{{ path('user_activity_list') }}">Log activități</a></li>
+            </ul>
+    {% endif %}
+
+
+
 <div class="main-content">
     {% for msg in app.session.flashBag.get('success') %}
         <div class="alert alert-success">

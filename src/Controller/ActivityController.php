@@ -21,9 +21,10 @@ class ActivityController extends AbstractController
      */
     public function homepage()
     {
-        return $this->render(
-            'start/start.html.twig'
-        );
+        if($this->getUser() == null)
+            return $this->redirectToRoute('security_login');
+        else
+            return $this->redirectToRoute('calendar_activity');
     }
 
     /**

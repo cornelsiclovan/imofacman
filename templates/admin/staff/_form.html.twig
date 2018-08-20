@@ -1,0 +1,10 @@
+{{ form_start(staffForm) }}
+    {{ form_row(staffForm.name, {'label' : 'Nume'}) }}
+    {{ form_row(staffForm.email ,{'label': 'Email'}) }}
+    {{ form_row(staffForm.staffType, {'label' : 'Departament'}) }}
+    {{ form_row(staffForm.roles, {'label' : 'Roluri'}) }}
+    {{ form_row(staffForm.plainPassword.first,{'label' : 'Password'}) }}
+    {{ form_row(staffForm.plainPassword.second, {'label' : 'Repeat password'}) }}
+
+<button type = "submit" class="btn btn-action" formnovalidate>{{ buttonText }}</button>
+{{ form_end(staffForm) }}

@@ -10,10 +10,15 @@ namespace App\Controller\Admin;
 use App\Entity\ActivityLog;
 use App\Entity\Owner;
 use App\Entity\Property;
+use App\Entity\Staff;
 use App\Form\OwnerForm;
 use App\Form\PropertyForm;
+use App\Form\StaffEditForm;
+use App\Form\StaffForm;
+use App\Form\StaffPasswordChange;
 use App\Repository\ActivityLogRepository;
 use App\Repository\OwnerRepository;
+use App\Service\HashPasswordListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -26,6 +31,13 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ActivityAdminController extends AbstractController
 {
+    private $listener;
+
+    public function __construct(HashPasswordListener $listener)
+    {
+        $this->listener = $listener;
+    }
+
     /**
      * @Route("/home", name="admin_home")
      */
@@ -152,6 +164,7 @@ class ActivityAdminController extends AbstractController
             ]
         );
     }
+
     /**
      * @Route("/owner/{id}/edit", name="admin_owner_edit")
      */
@@ -195,6 +208,112 @@ class ActivityAdminController extends AbstractController
             'admin/statistics/list.html.twig', [
                 'owner' => $owner,
                 'properties' => $properties
+            ]
+        );
+    }
+
+    /**
+     * @Route("/staff/list", name="admin_staff_list")
+     */
+    public function listStaff(EntityManagerInterface $em)
+    {
+        $repository = $em->getRepository(Staff::class);
+        $staff = $repository->findAll();
+        return $this->render(
+            'admin/staff/list.html.twig',[
+                'staff' => $staff,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/staff/new", name="admin_staff_new")
+     */
+    public function newStaff(Request $request)
+    {
+        $form = $this->createForm(StaffForm::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $staff = $form->getData();
+
+            $this->listener->encodePassword($staff);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($staff);
+            $em->flush();
+
+
+
+            $this->addFlash(
+                'success',
+                sprintf('Personal adaugat!, %s', $this->getUser()->getUserName())
+            );
+            return $this->redirectToRoute('admin_staff_list');
+        }
+
+        return $this->render(
+            'admin/staff/new.html.twig',[
+                'staffForm' => $form->createView()
+            ]
+        );
+    }
+
+    /**
+     * @Route("/staff/{id}/edit", name="admin_staff_edit")
+     */
+    public function editStaff(Request $request, Staff $staff)
+    {
+        $form = $this->createForm(StaffEditForm::class, $staff);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $staff = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($staff);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                sprintf('Personal modificat!, %s', $this->getUser()->getUserName())
+            );
+            return $this->redirectToRoute('admin_staff_list');
+        }
+
+        return $this->render(
+            'admin/staff/edit.html.twig',[
+                'staffEditForm' => $form->createView()
+            ]
+        );
+    }
+
+    /**
+     * @Route("/staff/{id}/password/change", name="admin_staff_password_change")
+     */
+    public function editPasswordChange(Request $request, Staff $staff)
+    {
+        $form = $this->createForm(StaffPasswordChange::class, $staff);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $staff = $form->getData();
+            $this->listener->encodePassword($staff);
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($staff);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                sprintf('Parola resetata!, %s', $this->getUser()->getUserName())
+            );
+            return $this->redirectToRoute('admin_staff_list');
+        }
+
+        return $this->render(
+            'admin/staff/passwordChange.html.twig',[
+                'staffPasswordChangeForm' => $form->createView()
             ]
         );
     }

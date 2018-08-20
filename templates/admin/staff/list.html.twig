@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12">
+                <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
+                    <a href="{{ path('admin_staff_new') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
+                </div>
+                <h1>Lista personal:</h1>
+                <table class="table">
+                    <tr>
+                        <td scope="col">#</td>
+                        <th scope="col">Nume</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Departament</th>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Edit</th>
+
+                    </tr>
+                    {%  set i = 0 %}
+                    {%  for employee in staff %}
+                        {%  set i = i + 1 %}
+                        <tr>
+                            <th scope="row">{{ i }}</th>
+                            <td>{{ employee.name}}</td>
+                            <td>{{ employee.email }}</td>
+                            <td>{{ employee.staffType }}</td>
+                            <td>{{ employee.roles|join(', ') }}
+                            <td><a href="{{ path('admin_staff_edit', {'id': employee.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
+                            <td><a href="{{ path('admin_staff_password_change', {'id': employee.id}) }}" class="btn btn-xs btn-danger"><span class="fa fa-lock"></span></a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

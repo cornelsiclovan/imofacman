@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Adaugare personal:</h1>
+
+                {{ include ('/admin/staff/_form.html.twig', {'buttonText': 'Adaugă'})}}
+            </div>
+        </div>
+    </div>
+{% endblock %}
