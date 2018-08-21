@@ -19,6 +19,24 @@ class PropertyRepository extends ServiceEntityRepository
         parent::__construct($registry, Property::class);
     }
 
+    /**
+     * @param null|string $term
+     * @return Property[]
+     */
+    public function findAllWithSearch(?string $term)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->innerJoin('p.owner', 'o')
+            ->addSelect('o');
+
+        if ($term) {
+            $qb->andWhere('p.name LIKE :term OR p.address LIKE :term OR o.name LIKE :term')
+                ->setParameter('term', '%' . $term . '%');
+
+        }
+        return $qb->orderBy('p.name', 'DESC')->getQuery()->getResult();
+
+    }
 //    /**
 //     * @return Property[] Returns an array of Property objects
 //     */

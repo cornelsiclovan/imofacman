@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/font-awesome.min.css') }}">
+
     {% endblock %}
 </head>
 <body>
@@ -16,7 +17,7 @@
     </form>
 </div>
 <header class="header">
-    <img class="logo-icon" src="{{ asset('images/logo.png') }}">
+    <img style="padding-left: 10px" class="logo-icon" src="{{ asset('images/logo.png') }}">
     <h1 class="logo"></h1>
     <ul class="navi">
         <li class="search"><a href="#" class="js-header-search-toggle"><i class="fa fa-search"></i></a></li>
@@ -31,7 +32,7 @@
 </header>
 
     {% if is_granted('ROLE_ADMIN')  %}
-    <ul class="nav nav-pills">
+    <ul class="nav nav-pills red">
         <li role="presentation" class="{{ app.request.get('_route') == 'calendar_activity' ? 'active' }}"><a href="{{ path('calendar_activity') }}">Acasă</a></li>
         <li role="presentation" class="{{ app.request.get('_route') == 'admin_staff_list' ? 'active' }}"><a href="{{ path('admin_staff_list') }}">Personal</a></li>
         <li role="presentation" class="{{ app.request.get('_route') == 'admin_property_list' ? 'active' }}"><a href="{{ path('admin_property_list') }}">Proprietăți</a></li>
@@ -45,7 +46,7 @@
                 <li role="presentation" class="{{ app.request.get('_route') == 'user_activity_list' ? 'active' }}"><a href="{{ path('user_activity_list') }}">Log activități</a></li>
             </ul>
     {% endif %}
-
+    <br/>
 
 
 <div class="main-content">

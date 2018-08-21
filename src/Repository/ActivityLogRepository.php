@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ActivityLog;
+use App\Entity\Staff;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +18,31 @@ class ActivityLogRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, ActivityLog::class);
+    }
+
+    /**
+     * @param null|string $term
+     * @return ActivityLog[]
+     */
+    public function findAllWithSearch(?string $term, Staff $staff)
+    {
+        if($term != null) {
+            $qb = $this->createQueryBuilder('l')
+                ->innerJoin('l.staff', 's')
+                ->addSelect('s')
+                ->innerJoin('l.owner', 'o')
+                ->addSelect('o')
+                ->innerJoin('l.property', 'p')
+                ->addSelect('p');
+            if ($term) {
+                $qb->andWhere('l.log LIKE :term OR l.publishedAt LIKE :term OR l.details LIKE :term OR s.name LIKE :term OR o.name LIKE :term OR p.name LIKE :term')->setParameter('term', '%' . $term . '%');
+                $qb->andWhere('s.email LIKE :staff')->setParameter('staff', $staff->getEmail());
+            }
+            return $qb->orderBy('l.publishedAt', 'DESC')->getQuery()->getResult();
+        }
+        else{
+            return $this->findBy(['staff'=>$staff]);
+        }
     }
 
 //    /**

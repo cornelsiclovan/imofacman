@@ -9,7 +9,9 @@
 namespace App\Controller;
 use App\Entity\ActivityLog;
 use App\Form\ActivityForm;
+use App\Repository\ActivityLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,14 +32,13 @@ class ActivityController extends AbstractController
     /**
      * @Route("/activity/list/", name="user_activity_list")
      */
-    public function showActivityList(EntityManagerInterface $em)
+    public function showActivityList(ActivityLogRepository $repository, Request $request, PaginatorInterface $paginator)
     {
-        $repository = $em->getRepository(ActivityLog::class);
+        $q = $request->query->get('q');
 
-        $activities = $repository->findLogsByUserId($this->getUser());
+        $activities = $repository->findAllWithSearch($q, $this->getUser());
 
-        return $this->render(
-            'activity/homepage.html.twig',
+        return $this->render('activity/homepage.html.twig',
             [
                 'activities' => $activities
             ]
@@ -50,6 +51,8 @@ class ActivityController extends AbstractController
      */
     public function calendarActivity()
     {
+
+
         return $this->render(
             'activity/calendar.html.twig'
         );

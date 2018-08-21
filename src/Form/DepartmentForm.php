@@ -16,10 +16,8 @@ class DepartmentForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('address')
-            ->add('email')
-            ->add('telephone');
+            ->add('type')
+         ;
     }
     public function configureOptions(OptionsResolver $resolver)
     {

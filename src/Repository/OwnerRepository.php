@@ -25,6 +25,24 @@ class OwnerRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('owner')
             ->orderBy('owner.name', 'ASC');
     }
+
+    /**
+     * @param null|string $term
+     * @return Owner[]
+     */
+    public function findAllWithSearch(?string $term)
+    {
+        $qb = $this->createQueryBuilder('o');
+
+        if ($term) {
+            $qb->andWhere('o.name LIKE :term OR o.email LIKE :term OR o.address LIKE :term OR o.telephone LIKE :term')
+                ->setParameter('term', '%' . $term . '%');
+
+        }
+        return $qb->orderBy('o.name', 'DESC')->getQuery()->getResult();
+
+    }
+
 //    /**
 //     * @return Owner[] Returns an array of Owner objects
 //     */

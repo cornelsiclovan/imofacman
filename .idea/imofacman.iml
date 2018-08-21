@@ -25,6 +25,8 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/reflection" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/fzaninotto/faker" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jdorn/sql-formatter" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-components" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-paginator-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-snappy" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-snappy-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nikic/php-parser" />
@@ -108,6 +110,8 @@
           <root url="file://$MODULE_DIR$/vendor/doctrine/reflection" />
           <root url="file://$MODULE_DIR$/vendor/fzaninotto/faker" />
           <root url="file://$MODULE_DIR$/vendor/jdorn/sql-formatter" />
+          <root url="file://$MODULE_DIR$/vendor/knplabs/knp-components" />
+          <root url="file://$MODULE_DIR$/vendor/knplabs/knp-paginator-bundle" />
           <root url="file://$MODULE_DIR$/vendor/knplabs/knp-snappy" />
           <root url="file://$MODULE_DIR$/vendor/knplabs/knp-snappy-bundle" />
           <root url="file://$MODULE_DIR$/vendor/nikic/php-parser" />
@@ -184,6 +188,8 @@
           <root url="file://$MODULE_DIR$/vendor/doctrine/reflection" />
           <root url="file://$MODULE_DIR$/vendor/fzaninotto/faker" />
           <root url="file://$MODULE_DIR$/vendor/jdorn/sql-formatter" />
+          <root url="file://$MODULE_DIR$/vendor/knplabs/knp-components" />
+          <root url="file://$MODULE_DIR$/vendor/knplabs/knp-paginator-bundle" />
           <root url="file://$MODULE_DIR$/vendor/knplabs/knp-snappy" />
           <root url="file://$MODULE_DIR$/vendor/knplabs/knp-snappy-bundle" />
           <root url="file://$MODULE_DIR$/vendor/nikic/php-parser" />

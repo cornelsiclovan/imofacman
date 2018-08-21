@@ -9,7 +9,22 @@
                     <a href="{{ path('admin_property_new') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
                 </div>
                 <h1>Proprietati in administrare:</h1>
-                <table class="table">
+                <form>
+                    <div class="input-group">
+                        <input type="text"
+                               name="q"
+                               class="form-control"
+                               placeholder="Search..."
+                               value="{{ app.request.query.get('q') }}"
+                        >
+                        <div class="input-group-btn">
+                            <button tabindex="-1" class="btn btn-default" type="submit">
+                                <span class="fa fa-search"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <table class="table table-striped">
                     <tr>
                         <td scope="col">#</td>
                         <th scope="col">Nume</th>

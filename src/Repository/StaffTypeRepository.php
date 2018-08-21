@@ -25,6 +25,23 @@ class StaffTypeRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('staff_type')
             ->orderBy('staff_type.type', 'ASC');
     }
+
+    /**
+     * @param null|string $term
+     * @return StaffType[]
+     */
+    public function findAllWithSearch(?string $term)
+    {
+        $qb = $this->createQueryBuilder('t');
+
+        if ($term) {
+            $qb->andWhere('t.type LIKE :term')
+                ->setParameter('term', '%' . $term . '%');
+
+        }
+        return $qb->orderBy('t.type', 'ASC')->getQuery()->getResult();
+
+    }
 //    /**
 //     * @return StaffType[] Returns an array of StaffType objects
 //     */

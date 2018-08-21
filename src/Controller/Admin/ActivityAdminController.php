@@ -20,8 +20,12 @@ use App\Form\StaffForm;
 use App\Form\StaffPasswordChange;
 use App\Repository\ActivityLogRepository;
 use App\Repository\OwnerRepository;
+use App\Repository\PropertyRepository;
+use App\Repository\StaffRepository;
+use App\Repository\StaffTypeRepository;
 use App\Service\HashPasswordListener;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,10 +57,12 @@ class ActivityAdminController extends AbstractController
     /**
      * @Route("/property/list", name="admin_property_list")
      */
-    public function listProperty(EntityManagerInterface $em)
+    public function listProperty(PropertyRepository $repository, Request $request, PaginatorInterface $paginator)
     {
-        $repository = $em->getRepository(Property::class);
-        $properties = $repository->findAll();
+        $q = $request->query->get('q');
+
+        $properties = $repository->findAllWithSearch($q);
+
         return $this->render(
             'admin/property/list.html.twig',[
                 'properties' => $properties,
@@ -127,10 +133,11 @@ class ActivityAdminController extends AbstractController
     /**
      * @Route("/owner/list", name="admin_owner_list")
      */
-    public function listOwner(EntityManagerInterface $em)
+    public function listOwner(OwnerRepository $repository, Request $request, PaginatorInterface $paginator)
     {
-        $repository = $em->getRepository(Owner::class);
-        $owners = $repository->findAll();
+        $q = $request->query->get('q');
+        $owners = $repository->findAllWithSearch($q);
+
         return $this->render(
             'admin/owner/list.html.twig',[
                 'owners' => $owners,
@@ -217,10 +224,10 @@ class ActivityAdminController extends AbstractController
     /**
      * @Route("/staff/list", name="admin_staff_list")
      */
-    public function listStaff(EntityManagerInterface $em)
+    public function listStaff(StaffRepository $repository, Request $request, PaginatorInterface $paginator)
     {
-        $repository = $em->getRepository(Staff::class);
-        $staff = $repository->findAll();
+        $q = $request->query->get('q');
+        $staff = $repository->findAllWithSearch($q);
         return $this->render(
             'admin/staff/list.html.twig',[
                 'staff' => $staff,
@@ -323,10 +330,10 @@ class ActivityAdminController extends AbstractController
     /**
      * @Route("/department/list", name="admin_department_list")
      */
-    public function listDepartment(EntityManagerInterface $em)
+    public function listDepartment(StaffTypeRepository $repository, Request $request, PaginatorInterface $paginator)
     {
-        $repository = $em->getRepository(StaffType::class);
-        $staffType = $repository->findAll();
+        $q = $request->query->get('q');
+        $staffType = $repository->findAllWithSearch($q);
         return $this->render(
             'admin/departments/list.html.twig',[
                 'departments' => $staffType,
@@ -360,8 +367,8 @@ class ActivityAdminController extends AbstractController
         }
 
         return $this->render(
-            'admin/staff/new.html.twig',[
-                'staffForm' => $form->createView()
+            'admin/departments/new.html.twig',[
+                'departmentForm' => $form->createView()
             ]
         );
     }
@@ -369,28 +376,28 @@ class ActivityAdminController extends AbstractController
     /**
      * @Route("/department/{id}/edit", name="admin_department_edit")
      */
-    public function editDepartment(Request $request, Staff $staff)
+    public function editDepartment(Request $request, StaffType $staffType)
     {
-        $form = $this->createForm(StaffEditForm::class, $staff);
+        $form = $this->createForm(DepartmentForm::class, $staffType);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $staff = $form->getData();
+            $staffType = $form->getData();
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($staff);
+            $em->persist($staffType);
             $em->flush();
 
             $this->addFlash(
                 'success',
                 sprintf('Personal modificat!, %s', $this->getUser()->getUserName())
             );
-            return $this->redirectToRoute('admin_staff_list');
+            return $this->redirectToRoute('admin_department_list');
         }
 
         return $this->render(
-            'admin/staff/edit.html.twig',[
-                'staffEditForm' => $form->createView()
+            'admin/departments/edit.html.twig',[
+                'departmentForm' => $form->createView()
             ]
         );
     }
