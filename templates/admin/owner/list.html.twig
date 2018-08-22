@@ -8,7 +8,7 @@
                 <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
                     <a href="{{ path('admin_owner_new') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
                 </div>
-                <h1>Lista proprietari:</h1>
+                <h1>Lista proprietari ({{ pagination.getTotalItemCount }})</h1>
                 <form>
                     <div class="input-group">
                         <input type="text"
@@ -33,7 +33,7 @@
                         <th scope="col">Telefon</th>
                     </tr>
                     {%  set i = 0 %}
-                    {%  for owner in owners %}
+                    {%  for owner in pagination %}
                         {%  set i = i + 1 %}
                         <tr>
                             <th scope="row">{{ i }}</th>
@@ -45,6 +45,8 @@
                         </tr>
                     {% endfor %}
                 </table>
+
+                {{ knp_pagination_render(pagination) }}
             </div>
         </div>
     </div>

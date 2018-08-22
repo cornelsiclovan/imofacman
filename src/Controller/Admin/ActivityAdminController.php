@@ -60,12 +60,16 @@ class ActivityAdminController extends AbstractController
     public function listProperty(PropertyRepository $repository, Request $request, PaginatorInterface $paginator)
     {
         $q = $request->query->get('q');
+        $queryBuilder = $repository->getWithSearchQueryBuilder($q);
 
-        $properties = $repository->findAllWithSearch($q);
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
 
-        return $this->render(
-            'admin/property/list.html.twig',[
-                'properties' => $properties,
+        return $this->render('admin/property/list.html.twig',[
+                'pagination' => $pagination,
             ]
         );
     }
@@ -136,11 +140,18 @@ class ActivityAdminController extends AbstractController
     public function listOwner(OwnerRepository $repository, Request $request, PaginatorInterface $paginator)
     {
         $q = $request->query->get('q');
-        $owners = $repository->findAllWithSearch($q);
+
+        $queryBuilder = $repository->getWithSearchBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
 
         return $this->render(
             'admin/owner/list.html.twig',[
-                'owners' => $owners,
+                'pagination' => $pagination,
             ]
         );
     }
@@ -207,15 +218,25 @@ class ActivityAdminController extends AbstractController
     /**
      * @Route("/statistics/{id}", name="admin_activity_per_owner_list")
      */
-    public function listOwnerActivity(EntityManagerInterface $em, Owner $owner, OwnerRepository $repository)
+    public function listOwnerActivity(ActivityLogRepository $repository, Request $request, PaginatorInterface $paginator, Owner $owner, EntityManagerInterface $em)
     {
-        $owner = $repository->findOneBy(['id' => $owner]);
+        $q = $request->query->get('q');
 
-        $properties = $owner->getProperties();
+        $queryBuilder = $repository->getWithSearchQueryBuilder($q, $owner);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        $propertyRepositoy = $em->getRepository(Property::class);
+        $properties = $propertyRepositoy->findBy(['owner'=>$owner]);
 
         return $this->render(
             'admin/statistics/list.html.twig', [
                 'owner' => $owner,
+                'pagination' => $pagination,
                 'properties' => $properties
             ]
         );
@@ -227,10 +248,17 @@ class ActivityAdminController extends AbstractController
     public function listStaff(StaffRepository $repository, Request $request, PaginatorInterface $paginator)
     {
         $q = $request->query->get('q');
-        $staff = $repository->findAllWithSearch($q);
+        $queryBuilder = $repository->getWithSearchQueryBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
         return $this->render(
             'admin/staff/list.html.twig',[
-                'staff' => $staff,
+                'pagination' => $pagination,
             ]
         );
     }
@@ -333,10 +361,17 @@ class ActivityAdminController extends AbstractController
     public function listDepartment(StaffTypeRepository $repository, Request $request, PaginatorInterface $paginator)
     {
         $q = $request->query->get('q');
-        $staffType = $repository->findAllWithSearch($q);
+
+        $queryBuilder = $repository->getWithSearchQueryBuilder($q);
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
         return $this->render(
             'admin/departments/list.html.twig',[
-                'departments' => $staffType,
+                'pagination' => $pagination,
             ]
         );
     }

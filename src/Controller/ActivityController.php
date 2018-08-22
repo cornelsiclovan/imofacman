@@ -8,7 +8,10 @@
 
 namespace App\Controller;
 use App\Entity\ActivityLog;
+use App\Entity\Owner;
+use App\Entity\Property;
 use App\Form\ActivityForm;
+use App\Form\TestForm;
 use App\Repository\ActivityLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -36,11 +39,16 @@ class ActivityController extends AbstractController
     {
         $q = $request->query->get('q');
 
-        $activities = $repository->findAllWithSearch($q, $this->getUser());
+        $queryBuilder = $repository->getWithQueryBuilder($q, $this->getUser());
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
 
         return $this->render('activity/homepage.html.twig',
             [
-                'activities' => $activities
+                'pagination' => $pagination
             ]
         );
     }
@@ -120,4 +128,5 @@ class ActivityController extends AbstractController
             ]
         );
     }
+    
 }

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Staff;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -21,9 +22,8 @@ class StaffRepository extends ServiceEntityRepository
 
     /**
      * @param null|string $term
-     * @return Staff[]
      */
-    public function findAllWithSearch(?string $term)
+    public function getWithSearchQueryBuilder(?string $term): QueryBuilder
     {
         $qb = $this->createQueryBuilder('s')
             ->innerJoin('s.staffType', 't')
@@ -34,7 +34,7 @@ class StaffRepository extends ServiceEntityRepository
                 ->setParameter('term', '%' . $term . '%');
 
         }
-        return $qb->orderBy('s.name', 'DESC')->getQuery()->getResult();
+        return $qb->orderBy('s.name', 'DESC');
 
     }
 //    /**

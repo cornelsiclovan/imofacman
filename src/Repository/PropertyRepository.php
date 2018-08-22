@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Property;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -21,9 +22,8 @@ class PropertyRepository extends ServiceEntityRepository
 
     /**
      * @param null|string $term
-     * @return Property[]
      */
-    public function findAllWithSearch(?string $term)
+    public function getWithSearchQueryBuilder(?string $term): QueryBuilder
     {
         $qb = $this->createQueryBuilder('p')
             ->innerJoin('p.owner', 'o')
@@ -34,9 +34,10 @@ class PropertyRepository extends ServiceEntityRepository
                 ->setParameter('term', '%' . $term . '%');
 
         }
-        return $qb->orderBy('p.name', 'DESC')->getQuery()->getResult();
+        return $qb->orderBy('p.name', 'DESC');
 
     }
+
 //    /**
 //     * @return Property[] Returns an array of Property objects
 //     */

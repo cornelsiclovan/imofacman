@@ -8,7 +8,7 @@
                 <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
                     <a href="{{ path('new_activity') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
                 </div>
-                <h1>Activitatile dumneavoastra</h1>
+                <h1>Activitatile dumneavoastra ({{ pagination.getTotalItemCount }})</h1>
                 <form>
                     <div class="input-group">
                         <input type="text"
@@ -39,7 +39,7 @@
                         <th scope="col">Pauza de masa</th>
                     </tr>
                     {%  set i = 0 %}
-                    {%  for activity in activities %}
+                    {%  for activity in pagination %}
                         {%  set i = i + 1 %}
                         <tr>
                             <th scope="row">{{ i }}</th>
@@ -63,6 +63,8 @@
                         </tr>
                     {% endfor %}
                 </table>
+
+                {{ knp_pagination_render(pagination) }}
             </div>
         </div>
     </div>

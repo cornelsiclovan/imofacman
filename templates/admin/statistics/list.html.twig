@@ -8,7 +8,7 @@
                 <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
                     <a href="{{ path('new_activity') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
                 </div>
-                <h1>Raport pentru clientul : {{ owner }}</h1>
+                <h1>Raport pentru clientul {{ owner }} ({{ pagination.getTotalItemCount }})</h1>
                 <form>
                     <div class="input-group">
                         <input type="text"
@@ -38,7 +38,7 @@
                         <th scope="col">Pauza de masa</th>
                     </tr>
                     {%  set i = 0 %}
-                    {%  for log in owner.activityLogs %}
+                    {%  for log in pagination %}
                         {%  set i = i + 1 %}
                         <tr>
                             <th scope="row">{{ i }}</th>

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Owner;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -28,9 +29,8 @@ class OwnerRepository extends ServiceEntityRepository
 
     /**
      * @param null|string $term
-     * @return Owner[]
      */
-    public function findAllWithSearch(?string $term)
+    public function getWithSearchBuilder(?string $term): QueryBuilder
     {
         $qb = $this->createQueryBuilder('o');
 
@@ -39,7 +39,7 @@ class OwnerRepository extends ServiceEntityRepository
                 ->setParameter('term', '%' . $term . '%');
 
         }
-        return $qb->orderBy('o.name', 'DESC')->getQuery()->getResult();
+        return $qb->orderBy('o.name', 'DESC');
 
     }
 

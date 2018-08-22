@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\ActivityLog;
+use App\Entity\Owner;
 use App\Entity\Staff;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -22,9 +24,8 @@ class ActivityLogRepository extends ServiceEntityRepository
 
     /**
      * @param null|string $term
-     * @return ActivityLog[]
      */
-    public function findAllWithSearch(?string $term, Staff $staff)
+    public function getWithQueryBuilder(?string $term, Staff $staff): QueryBuilder
     {
         if($term != null) {
             $qb = $this->createQueryBuilder('l')
@@ -34,17 +35,50 @@ class ActivityLogRepository extends ServiceEntityRepository
                 ->addSelect('o')
                 ->innerJoin('l.property', 'p')
                 ->addSelect('p');
+
             if ($term) {
                 $qb->andWhere('l.log LIKE :term OR l.publishedAt LIKE :term OR l.details LIKE :term OR s.name LIKE :term OR o.name LIKE :term OR p.name LIKE :term')->setParameter('term', '%' . $term . '%');
                 $qb->andWhere('s.email LIKE :staff')->setParameter('staff', $staff->getEmail());
             }
-            return $qb->orderBy('l.publishedAt', 'DESC')->getQuery()->getResult();
+            return $qb->orderBy('l.publishedAt', 'DESC');
         }
         else{
-            return $this->findBy(['staff'=>$staff]);
+            return $this->createQueryBuilder('a')
+                ->andWhere('a.staff = :val')
+                ->setParameter('val', $staff);
         }
     }
 
+
+    /**
+     * @param null|string $term
+     */
+    public function getWithSearchQueryBuilder(?string $term, Owner $owner): QueryBuilder
+    {
+        if($term != null) {
+            $qb = $this->createQueryBuilder('l')
+                ->innerJoin('l.staff', 's')
+                ->addSelect('s')
+                ->innerJoin('l.owner', 'o')
+                ->addSelect('o')
+                ->innerJoin('l.property', 'p')
+                ->addSelect('p')
+                ->innerJoin('s.staffType', 't')
+                ->addSelect('t');
+
+            if ($term) {
+                $qb->andWhere('l.log LIKE :term OR l.publishedAt LIKE :term OR l.details LIKE :term OR s.name LIKE :term OR o.name LIKE :term OR p.name LIKE :term OR t.type LIKE :term')->setParameter('term', '%' . $term . '%');
+                $qb->andWhere('o.email LIKE :owner')->setParameter('owner', $owner->getEmail());
+            }
+            return $qb->orderBy('l.publishedAt', 'DESC');
+        }
+        else{
+            return $this->createQueryBuilder('a')
+                ->innerJoin('a.owner', 'o')
+                ->andWhere('o.email LIKE :val')
+                ->setParameter('val', $owner->getEmail());
+        }
+    }
 //    /**
 //     * @return ActivityLog[] Returns an array of ActivityLog objects
 //     */
