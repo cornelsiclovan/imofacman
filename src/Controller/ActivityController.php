@@ -8,16 +8,15 @@
 
 namespace App\Controller;
 use App\Entity\ActivityLog;
-use App\Entity\Owner;
-use App\Entity\Property;
 use App\Form\ActivityForm;
 use App\Form\TestForm;
 use App\Repository\ActivityLogRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ActivityController extends AbstractController
 {
@@ -143,5 +142,55 @@ class ActivityController extends AbstractController
                 'form' => $form->createView()
             ]
         );
+    }
+
+    /**
+ * @Route("/activity/{activityLogId}/owner/{ownerId}", name="owner_activity_remove")
+ * @Method("DELETE")
+ */
+    public function removeOwnerFromLogAction($activityLogId, $ownerId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $activityLog = $em->getRepository('App:ActivityLog')
+            ->find($activityLogId);
+        if(!$activityLog){
+            throw $this->createNotFoundException('Acest log nu a fost gasit');
+        }
+        $owner = $em->getRepository('App:Owner')
+            ->find($ownerId);
+        if(!$owner){
+            throw $this->createNotFoundException('Acest proprietar nu a fost gasit');
+        }
+
+        $activityLog->removeOwner($owner);
+        $em->persist($activityLog);
+        $em->flush();
+
+        return new Response(null, 204);
+    }
+
+    /**
+     * @Route("/activity/{activityLogId}/property/{propertyId}", name="property_activity_remove")
+     * @Method("DELETE")
+     */
+    public function removePropertyFromLogAction($activityLogId, $propertyId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $activityLog = $em->getRepository('App:ActivityLog')
+            ->find($activityLogId);
+        if(!$activityLog){
+            throw $this->createNotFoundException('Acest log nu a fost gasit');
+        }
+        $property = $em->getRepository('App:Property')
+            ->find($propertyId);
+        if(!$property){
+            throw $this->createNotFoundException('Acest proprietar nu a fost gasit');
+        }
+
+        $activityLog->removeProperty($property);
+        $em->persist($activityLog);
+        $em->flush();
+
+        return new Response(null, 204);
     }
 }

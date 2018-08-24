@@ -30,8 +30,8 @@
                         <td scope="col">#</td>
                         <th scope="col">Data</th>
                         <th scope="col">Nume</th>
-                        <th scope="col">Beneficiari</th>
                         <th scope="col">Locatii</th>
+                        <th scope="col">Beneficiari</th>
                         <th scope="col">Intern</th>
                         <th scope="col">Lucrare</th>
                         <th scope="col">Durata (ore)</th>
@@ -45,8 +45,41 @@
                             <th scope="row">{{ i }}</th>
                             <td>{{ activity.publishedAt|date('Y-m-d') }}</td>
                             <td>{{ activity }}</td>
-                            <td>{{ activity.property|join(', ') }}</td>
-                            <td>{{ activity.owner|join(', ') }}</td>
+                            <td>
+                                {% for property in activity.property %}
+                                     <span class="js-property-item">
+                                        {{ property }}
+                                        <a href="#"
+                                           class="btn btn-link btn-xs pull-right js-remove-property-from-log"
+                                           data-url="{{ path('property_activity_remove', {
+                                               activityLogId: activity.id,
+                                               propertyId: property.id
+                                           }) }}"
+                                        >
+                                            <span class="fa fa-close"></span>
+                                        </a>
+                                        <hr>
+                                    </span>
+                                {% endfor %}
+
+                            </td>
+                            <td>
+                                {% for owner in activity.owner %}
+                                    <span class="js-owner-item">
+                                        {{ owner }}
+                                        <a href="#"
+                                           class="btn btn-link btn-xs pull-right js-remove-owner-from-log"
+                                           data-url="{{ path('owner_activity_remove', {
+                                               activityLogId: activity.id,
+                                               ownerId: owner.id
+                                           }) }}"
+                                        >
+                                            <span class="fa fa-close"></span>
+                                        </a>
+                                    <hr>
+                                    </span>
+                                {% endfor %}
+                            </td>
                             <td><input type="checkbox" {% if activity.intern == true %} checked {% endif %}/></td>
                             <td>{{ activity.log }}</td>
                             <td>{{ activity.duration }}</td>
@@ -68,4 +101,44 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(document).ready(function() {
+            $('.js-remove-owner-from-log').on('click', function (e) {
+                e.preventDefault();
+
+                var $el = $(this).closest('.js-owner-item');
+                $(this).find('.fa-close')
+                    .removeClass('fa-close')
+                    .addClass('fa-spinner')
+                    .addClass('fa-spin');
+
+                $.ajax({
+                    url: $(this).data('url'),
+                    method: 'DELETE'
+                }).done(function(){
+                    $el.fadeOut();
+                });
+            });
+
+            $('.js-remove-property-from-log').on('click', function (e) {
+                e.preventDefault();
+
+                var $el = $(this).closest('.js-property-item');
+                $(this).find('.fa-close')
+                    .removeClass('fa-close')
+                    .addClass('fa-spinner')
+                    .addClass('fa-spin');
+
+                $.ajax({
+                    url: $(this).data('url'),
+                    method: 'DELETE'
+                }).done(function(){
+                    $el.fadeOut();
+                });
+            });
+        });
+    </script>
 {% endblock %}

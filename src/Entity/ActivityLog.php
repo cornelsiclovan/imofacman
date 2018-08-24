@@ -24,6 +24,7 @@ class ActivityLog
     /**
      * @Assert\NotBlank()
      * @ORM\ManyToMany(targetEntity="App\Entity\Owner", inversedBy="activityLogs")
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $owner;
 
@@ -70,6 +71,7 @@ class ActivityLog
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Property", inversedBy="activityLogs")
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $property;
 

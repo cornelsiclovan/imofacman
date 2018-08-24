@@ -13,6 +13,7 @@ use App\Repository\OwnerRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -37,11 +38,13 @@ class ActivityForm extends AbstractType
                 'class'    => Owner::class,
                 'query_builder' => function(OwnerRepository $repo){
                     return $repo->createAlphabeticalQueryBuilder();
-                }
+                },
+                'expanded' => true
             ])
             ->add('property', EntityType::class,[
                 'multiple'=>true,
-                'class' => Property::class
+                'class' => Property::class,
+                'expanded' => true
             ])
             ->add('lunchBreak', null,[
                     'help' => 'Pauza de masa este 1 ora de obicei 13-14'
