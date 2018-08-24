@@ -12,7 +12,9 @@
                 {{ form_row(form.plainPassword.second, {'label' : 'Repeat password'}) }}
                 {{ form_row(form.staffType) }}
 
-                <button type="submit" class="btn btn-primary" formnovalidate>Register</button>
+                <button type="submit" class="btn btn-success" formnovalidate>Register</button>
+
+            &nbsp <a href="{{ path('security_login')}}"> Go to login</a>
             {{ form_end(form) }}
         </div>
     </div>

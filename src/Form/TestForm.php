@@ -2,11 +2,12 @@
 /**
  * Created by PhpStorm.
  * User: user
- * Date: 08.08.2018
- * Time: 15:58
+ * Date: 22.08.2018
+ * Time: 14:49
  */
 
 namespace App\Form;
+use App\Entity\ActivityLog;
 use App\Entity\Owner;
 use App\Entity\Property;
 use App\Repository\OwnerRepository;
@@ -15,20 +16,18 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ActivityForm extends AbstractType
+class TestForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('intern', ChoiceType::class,[
-                'choices' => [
-                    'Da' => true,
-                    'Nu' => false
-                ]
-            ])
+            'choices' => [
+                'Da' => true,
+                'Nu' => false
+            ]
+        ])
             ->add('log')
             ->add('duration')
             ->add('details')
@@ -43,9 +42,7 @@ class ActivityForm extends AbstractType
                 'multiple'=>true,
                 'class' => Property::class
             ])
-            ->add('lunchBreak', null,[
-                    'help' => 'Pauza de masa este 1 ora de obicei 13-14'
-            ])
+            ->add('lunchBreak')
             ->add('publishedAt', DateType::class, [
                 'widget' => 'single_text',
                 'attr' => ['class' => 'js-datepicker'],
@@ -53,15 +50,10 @@ class ActivityForm extends AbstractType
             ]);
     }
 
-    //public function finishView(FormView $view, FormInterface $form, array $options)
-    //{
-    //   $view['lunchBreak']->vars['help'] = "Pauza de masa este 1 ora de obicei 13-14";
-    //}
-
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => 'App\Entity\ActivityLog'
-        ]);
+        $resolver->setDefaults(array(
+            'data_class' =>  ActivityLog::class,
+        ));
     }
 }

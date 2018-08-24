@@ -128,5 +128,20 @@ class ActivityController extends AbstractController
             ]
         );
     }
-    
+
+    /**
+     * @Route("/test/forms", name="test_forms")
+     */
+    public function testForm(Request $request)
+    {
+        $form = $this->createForm(TestForm::class);
+
+
+        return $this->render(
+            'test/new.html.twig',
+            [
+                'form' => $form->createView()
+            ]
+        );
+    }
 }

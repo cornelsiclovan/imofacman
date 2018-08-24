@@ -35,7 +35,7 @@ class StaffTypeRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('t');
 
         if ($term) {
-            $qb->andWhere('t.type LIKE :term')
+            $qb->andWhere('t.type LIKE :term OR t.addDataFor LIKE :term')
                 ->setParameter('term', '%' . $term . '%');
 
         }

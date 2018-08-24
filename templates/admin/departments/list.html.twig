@@ -28,6 +28,7 @@
                     <tr>
                         <td scope="col">#</td>
                         <th scope="col">Nume departament</th>
+                        <th scope="col">Adauga informatii in functie de:</th>
                     </tr>
                     {%  set i = 0 %}
                     {%  for department in pagination %}
@@ -35,6 +36,7 @@
                         <tr>
                             <th scope="row">{{ i }}</th>
                             <td>{{ department.type }}</td>
+                            <td>{{ department.addDataFor }}</td>
                             <td><a href="{{ path('admin_department_edit', {'id': department.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
                         </tr>
                     {% endfor %}

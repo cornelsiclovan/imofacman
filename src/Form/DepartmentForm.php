@@ -8,6 +8,7 @@
 
 namespace App\Form;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,6 +18,12 @@ class DepartmentForm extends AbstractType
     {
         $builder
             ->add('type')
+            ->add('addDataFor', ChoiceType::class, array(
+                'choices' => array(
+                    'Proprietate' => 'Proprietate',
+                    'Proprietar'    => 'Proprietar'
+                )
+            ))
          ;
     }
     public function configureOptions(OptionsResolver $resolver)

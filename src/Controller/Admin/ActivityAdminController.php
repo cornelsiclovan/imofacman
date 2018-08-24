@@ -386,17 +386,13 @@ class ActivityAdminController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $staffType = $form->getData();
 
-            $this->listener->encodePassword($staffType);
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($staffType);
             $em->flush();
 
-
-
             $this->addFlash(
                 'success',
-                sprintf('Personal adaugat!, %s', $this->getUser()->getUserName())
+                sprintf('Departamet adaugat!, %s', $this->getUser()->getUserName())
             );
             return $this->redirectToRoute('admin_department_list');
         }

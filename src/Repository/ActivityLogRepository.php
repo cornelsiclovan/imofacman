@@ -43,9 +43,10 @@ class ActivityLogRepository extends ServiceEntityRepository
             return $qb->orderBy('l.publishedAt', 'DESC');
         }
         else{
-            return $this->createQueryBuilder('a')
+            $qb = $this->createQueryBuilder('a')
                 ->andWhere('a.staff = :val')
                 ->setParameter('val', $staff);
+            return $qb->orderBy('a.publishedAt', 'DESC');
         }
     }
 
@@ -73,10 +74,11 @@ class ActivityLogRepository extends ServiceEntityRepository
             return $qb->orderBy('l.publishedAt', 'DESC');
         }
         else{
-            return $this->createQueryBuilder('a')
+            $qb = $this->createQueryBuilder('a')
                 ->innerJoin('a.owner', 'o')
                 ->andWhere('o.email LIKE :val')
                 ->setParameter('val', $owner->getEmail());
+            return $qb->orderBy('a.publishedAt', 'DESC');
         }
     }
 //    /**

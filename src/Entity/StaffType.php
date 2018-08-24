@@ -28,6 +28,11 @@ class StaffType
      */
     private $staff;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $addDataFor;
+
     public function __construct()
     {
         $this->staff = new ArrayCollection();
@@ -83,5 +88,17 @@ class StaffType
 
     public function __toString(){
         return $this->type;
+    }
+
+    public function getAddDataFor(): ?string
+    {
+        return $this->addDataFor;
+    }
+
+    public function setAddDataFor(string $addDataFor): self
+    {
+        $this->addDataFor = $addDataFor;
+
+        return $this;
     }
 }

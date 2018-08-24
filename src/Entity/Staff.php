@@ -5,11 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StaffRepository")
+ * @UniqueEntity(fields={"email"}, message="It looks like your already have an account!", groups={"registration", "staff_edit"})
  */
 class Staff implements UserInterface
 {
@@ -29,7 +31,7 @@ class Staff implements UserInterface
     /**
      * @Assert\NotBlank(groups={"registration", "staff_edit"})
      * @Assert\Email()
-     * @ORM\Column(type="string", length=50, unique=true)
+     * @ORM\Column(name="email", type="string", length=50, unique=true)
      */
     private $email;
 
