@@ -30,7 +30,7 @@ class Staff implements UserInterface
 
     /**
      * @Assert\NotBlank(groups={"registration", "staff_edit"})
-     * @Assert\Email()
+     * @Assert\Email(groups={"registration", "staff_edit"})
      * @ORM\Column(name="email", type="string", length=50, unique=true)
      */
     private $email;

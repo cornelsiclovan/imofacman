@@ -7,6 +7,7 @@
  */
 
 namespace App\Form;
+use App\Entity\ActivityLog;
 use App\Entity\Owner;
 use App\Entity\Property;
 use App\Repository\OwnerRepository;
@@ -33,19 +34,14 @@ class ActivityForm extends AbstractType
             ->add('log')
             ->add('duration')
             ->add('details')
-            ->add('owner',EntityType::class,[
-                'multiple' => true,
-                'class'    => Owner::class,
-                'query_builder' => function(OwnerRepository $repo){
-                    return $repo->createAlphabeticalQueryBuilder();
-                },
-                'expanded' => true
-            ])
             ->add('property', EntityType::class,[
                 'multiple'=>true,
                 'class' => Property::class,
                 'expanded' => true
             ])
+            //->add('property', CollectionType::class,[
+            //    'entry_type' => LogPropertyEmbededForm::class
+            //])
             ->add('lunchBreak', null,[
                     'help' => 'Pauza de masa este 1 ora de obicei 13-14'
             ])
@@ -64,7 +60,8 @@ class ActivityForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'App\Entity\ActivityLog'
+            'data_class' => ActivityLog::class,
+            'validation_groups' => array('for_property_data_input')
         ]);
     }
 }

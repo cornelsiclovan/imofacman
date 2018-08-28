@@ -26,10 +26,12 @@ use App\Repository\StaffTypeRepository;
 use App\Service\HashPasswordListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Security("is_granted('ROLE_MANAGE_LOGS')")
@@ -135,6 +137,26 @@ class ActivityAdminController extends AbstractController
     }
 
     /**
+     * @Route("/property/{id}/delete", name="admin_property_delete")
+     * @Method("DELETE")
+     */
+    public function removeProperty($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $property = $em->getRepository(Property::class)->findOneBy(['id' =>$id]);
+
+        if(!$property){
+            throw $this->createNotFoundException('Acesta proprietate nu a fost gasit');
+        }
+
+        $em->remove($property);
+        $em->flush();
+
+        return new Response(null, 204);
+
+    }
+
+    /**
      * @Route("/owner/list", name="admin_owner_list")
      */
     public function listOwner(OwnerRepository $repository, Request $request, PaginatorInterface $paginator)
@@ -213,6 +235,26 @@ class ActivityAdminController extends AbstractController
                 'ownerForm' => $form->createView()
             ]
         );
+    }
+
+    /**
+     * @Route("/owner/{id}/remove", name="admin_owner_remove")
+     * @Method("DELETE")
+     */
+    public function removeOwner($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $owner = $em->getRepository(Owner::class)->findOneBy(['id' =>$id]);
+
+        if(!$owner){
+            throw $this->createNotFoundException('Acest proprietar nu a fost gasit');
+        }
+
+        $em->remove($owner);
+        $em->flush();
+
+        return new Response(null, 204);
     }
 
     /**
@@ -322,6 +364,25 @@ class ActivityAdminController extends AbstractController
                 'staffEditForm' => $form->createView()
             ]
         );
+    }
+
+    /**
+     * @Route("/staff/{id}/delete", name="admin_staff_delete")
+     * @Method("DELETE")
+     */
+    public function deleteStaff($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $staff = $em->getRepository(Staff::class)->findOneBy(['id' =>$id]);
+
+        if(!$staff){
+            throw $this->createNotFoundException('Acest angajat nu a fost gasit');
+        }
+
+        $em->remove($staff);
+        $em->flush();
+
+        return new Response(null, 204);
     }
 
     /**

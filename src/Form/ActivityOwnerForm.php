@@ -2,23 +2,23 @@
 /**
  * Created by PhpStorm.
  * User: user
- * Date: 22.08.2018
- * Time: 14:49
+ * Date: 28.08.2018
+ * Time: 10:02
  */
 
 namespace App\Form;
 use App\Entity\ActivityLog;
 use App\Entity\Owner;
-use App\Entity\Property;
 use App\Repository\OwnerRepository;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TestForm extends AbstractType
+class ActivityOwnerForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -36,13 +36,12 @@ class TestForm extends AbstractType
                 'class'    => Owner::class,
                 'query_builder' => function(OwnerRepository $repo){
                     return $repo->createAlphabeticalQueryBuilder();
-                }
+                },
+                'expanded' => true
             ])
-            ->add('property', EntityType::class,[
-                'multiple'=>true,
-                'class' => Property::class
+            ->add('lunchBreak', null,[
+                'help' => 'Pauza de masa este 1 ora de obicei 13-14'
             ])
-            ->add('lunchBreak')
             ->add('publishedAt', DateType::class, [
                 'widget' => 'single_text',
                 'attr' => ['class' => 'js-datepicker'],
@@ -52,8 +51,10 @@ class TestForm extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' =>  ActivityLog::class,
-        ));
+        $resolver->setDefaults([
+            'data_class' => ActivityLog::class,
+            'validation_groups' => array('for_owner_data_input')
+        ]);
     }
+
 }

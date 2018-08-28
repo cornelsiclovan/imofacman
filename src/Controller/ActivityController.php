@@ -8,10 +8,12 @@
 
 namespace App\Controller;
 use App\Entity\ActivityLog;
+use App\Entity\ActivityLogProperty;
 use App\Form\ActivityForm;
-use App\Form\TestForm;
+use App\Form\ActivityOwnerForm;
 use App\Repository\ActivityLogRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Proxies\__CG__\App\Entity\Property;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,7 +40,11 @@ class ActivityController extends AbstractController
     {
         $q = $request->query->get('q');
 
-        $queryBuilder = $repository->getWithQueryBuilder($q, $this->getUser());
+        if($this->getUser()->getStaffType()->getAddDataFor() != 'Proprietar')
+            $queryBuilder = $repository->getWithQueryBuilder($q, $this->getUser());
+        else
+            $queryBuilder = $repository->getForOwnerWithQueryBuilder($q, $this->getUser());
+
         $pagination = $paginator->paginate(
             $queryBuilder, /* query NOT result */
             $request->query->getInt('page', 1)/*page number*/,
@@ -47,7 +53,8 @@ class ActivityController extends AbstractController
 
         return $this->render('activity/homepage.html.twig',
             [
-                'pagination' => $pagination
+                'pagination' => $pagination,
+                'user_is_owner' => ($this->getUser()->getStaffType()->getAddDataFor() == 'Proprietar')
             ]
         );
     }
@@ -70,13 +77,26 @@ class ActivityController extends AbstractController
      */
     public function newActivity(Request $request)
     {
-        $form = $this->createForm(ActivityForm::class);
+        $bool = false;
+        if($this->getUser()->getStaffType()->getAddDataFor() == 'Proprietar') {
+            $form = $this->createForm(ActivityOwnerForm::class);
+            $bool = true;
+        }else{
+            $form = $this->createForm(ActivityForm::class);
+        }
+
         //only handles data on POST
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $activityLog = $form->getData();
 
             $activityLog->setStaff($this->getUser());
+
+            $properties = $activityLog->getProperty();
+            foreach($properties as $property) {
+                dump($property->getOwner());
+                $activityLog->addOwner($property->getOwner());
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($activityLog);
@@ -92,6 +112,7 @@ class ActivityController extends AbstractController
           'activity/new.html.twig',
             [
               'activityForm' => $form->createView(),
+                'user_is_owner' => $bool
             ]
         );
     }
@@ -101,14 +122,29 @@ class ActivityController extends AbstractController
      */
     public function editActivity(Request $request, ActivityLog $activityLog)
     {
-        $form = $this->createForm(ActivityForm::class, $activityLog);
-        //only handles data on POST
+        $bool = false;
+        if($this->getUser()->getStaffType()->getAddDataFor() == 'Proprietar') {
+            $form = $this->createForm(ActivityOwnerForm::class, $activityLog);
+            $bool = true;
+        }else{
+            $form = $this->createForm(ActivityForm::class, $activityLog);
+        }
+
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $activityLog = $form->getData();
 
+            $properties = $activityLog->getProperty();
+
+            foreach($properties as $property) {
+                dump($property->getOwner());
+                $activityLog->addOwner($property->getOwner());
+            }
+
+
 
             $em = $this->getDoctrine()->getManager();
+
             $em->persist($activityLog);
             $em->flush();
 
@@ -120,28 +156,13 @@ class ActivityController extends AbstractController
 
             return $this->redirectToRoute('user_activity_list');
         }
-        return $this->render(
-            'activity/edit.html.twig',
-            [
-                'activityForm' => $form->createView()
-            ]
-        );
-    }
-
-    /**
-     * @Route("/test/forms", name="test_forms")
-     */
-    public function testForm(Request $request)
-    {
-        $form = $this->createForm(TestForm::class);
 
 
-        return $this->render(
-            'test/new.html.twig',
-            [
-                'form' => $form->createView()
-            ]
-        );
+        return $this->render('activity/edit.html.twig', [
+            'activityForm' => $form->createView(),
+            'user_is_owner' => $bool
+        ]);
+
     }
 
     /**

@@ -30,8 +30,15 @@
                         <td scope="col">#</td>
                         <th scope="col">Data</th>
                         <th scope="col">Nume</th>
-                        <th scope="col">Locatii</th>
-                        <th scope="col">Beneficiari</th>
+
+                        {% if not user_is_owner %}
+                            <th scope="col">Proprietati</th>
+                        {% endif %}
+
+                        {% if user_is_owner %}
+                            <th scope="col">Proprietari</th>
+                        {% endif %}
+
                         <th scope="col">Intern</th>
                         <th scope="col">Lucrare</th>
                         <th scope="col">Durata (ore)</th>
@@ -45,6 +52,8 @@
                             <th scope="row">{{ i }}</th>
                             <td>{{ activity.publishedAt|date('Y-m-d') }}</td>
                             <td>{{ activity }}</td>
+
+                            {% if not user_is_owner %}
                             <td>
                                 {% for property in activity.property %}
                                      <span class="js-property-item">
@@ -61,8 +70,10 @@
                                         <hr>
                                     </span>
                                 {% endfor %}
-
                             </td>
+                            {% endif %}
+
+                            {% if user_is_owner %}
                             <td>
                                 {% for owner in activity.owner %}
                                     <span class="js-owner-item">
@@ -80,6 +91,7 @@
                                     </span>
                                 {% endfor %}
                             </td>
+                            {% endif %}
                             <td><input type="checkbox" {% if activity.intern == true %} checked {% endif %}/></td>
                             <td>{{ activity.log }}</td>
                             <td>{{ activity.duration }}</td>

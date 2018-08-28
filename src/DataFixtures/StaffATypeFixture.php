@@ -13,6 +13,7 @@ class StaffATypeFixture extends BaseFixtures
     {
         $this->createMany(StaffType::class, 5, function(StaffType $staffType) use ($manager) {
             $staffType->setType(self::$roles[self::$i++]);
+            $staffType->setAddDataFor('Proprietar');
         });
 
         $manager->flush();

@@ -45,6 +45,16 @@
                             <td>{{ employee.roles|join(', ') }}
                             <td><a href="{{ path('admin_staff_edit', {'id': employee.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
                             <td><a href="{{ path('admin_staff_password_change', {'id': employee.id}) }}" class="btn btn-xs btn-danger"><span class="fa fa-lock"></span></a></td>
+                            <td>
+                                <a href="#"
+                                   class="btn btn-link btn-xs pull-right js-remove-staff"
+                                   data-url="{{ path('admin_staff_delete', {
+                                       id: employee.id,
+                                   }) }}"
+                                >
+                                    <span class="fa fa-close" style="color:red"></span>
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -53,4 +63,35 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/sweetalert2/6.1.0/sweetalert2.min.css" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/sweetalert2/6.1.0/sweetalert2.min.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+
+            $('.js-remove-staff').on('click', function (e) {
+                e.preventDefault();
+
+                var $el = $(this).closest('tr');
+                $(this).find('.fa-close')
+                    .removeClass('fa-close')
+                    .addClass('fa-spinner')
+                    .addClass('fa-spin');
+
+                $.ajax({
+                    url: $(this).data('url'),
+                    method: 'DELETE'
+                }).done(function () {
+                    $el.fadeOut();
+                });
+            });
+        });
+    </script>
 {% endblock %}

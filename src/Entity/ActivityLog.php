@@ -22,7 +22,7 @@ class ActivityLog
 
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"for_owner_data_input"})
      * @ORM\ManyToMany(targetEntity="App\Entity\Owner", inversedBy="activityLogs")
      * @ORM\OrderBy({"name" = "ASC"})
      */
@@ -72,6 +72,7 @@ class ActivityLog
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Property", inversedBy="activityLogs")
      * @ORM\OrderBy({"name" = "ASC"})
+     * @Assert\NotBlank(groups={"for_property_data_input"})
      */
     private $property;
 
@@ -92,12 +93,12 @@ class ActivityLog
     /**
      * @Assert\Collection(
      *     fields={
-                "0" = @Assert\NotBlank()
+                "0" = @Assert\NotBlank(groups={"for_owner_data_input"})
      *
 *          },
      *     allowMissingFields=false,
-     *     allowExtraFields=true
-     *
+     *     allowExtraFields=true,
+     *     groups={"for_owner_data_input"}
      * )
      * @return Collection|Owner[]
      */
@@ -216,12 +217,12 @@ class ActivityLog
     /**
      *  * @Assert\Collection(
      *     fields={
-                 "0" = @Assert\NotBlank()
+                 "0" = @Assert\NotBlank(groups={"for_property_data_input"})
      *
      *          },
      *     allowMissingFields=false,
-     *     allowExtraFields=true
-     *
+     *     allowExtraFields=true,
+     *     groups={"for_property_data_input"}
      * )
      * @return Collection|Property[]
      */

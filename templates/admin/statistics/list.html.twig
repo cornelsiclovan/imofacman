@@ -29,8 +29,8 @@
                         <td scope="col">#</td>
                         <th scope="col">Data</th>
                         <th scope="col">Departament</th>
-                        <th scope="col">Beneficiari</th>
-                        <th scope="col">Locatii</th>
+                        <th scope="col">Proprietari</th>
+                        <th scope="col">Proprietati</th>
                         <th scope="col">Intern</th>
                         <th scope="col">Lucrare</th>
                         <th scope="col">Durata (ore)</th>
@@ -48,6 +48,7 @@
                             <td>{%  for p in log.property %}
                                     {% if p in properties %}
                                          {{ p }}
+                                        ,
                                     {% endif %}
                                 {%  endfor %}</td>
                             <td><input type="checkbox" {% if log.intern == true %} checked {% endif %}/></td>
