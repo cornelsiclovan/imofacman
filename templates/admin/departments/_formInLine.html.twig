@@ -1,0 +1,16 @@
+{{ form_start(departmentForm, {
+    'attr': {
+        'class': 'form-inline',
+        'novalidate': 'novalidate'
+    }
+}) }}
+
+    {{ form_errors(departmentForm) }}
+    {{ form_row(departmentForm.type, {
+        'label' : 'Adauga departament:',
+        'attr':{'placeholder': 'Denumire departament'}
+    }) }}
+    {{ form_row(departmentForm.addDataFor, {'label' : 'Acest departament adauga informatii legate de:'}) }}
+
+<button type = "submit" class="btn btn-success" formnovalidate>{{ buttonText }}</button>
+{{ form_end(departmentForm) }}

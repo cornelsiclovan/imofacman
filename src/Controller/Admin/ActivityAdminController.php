@@ -423,6 +423,8 @@ class ActivityAdminController extends AbstractController
     {
         $q = $request->query->get('q');
 
+        $form = $this->createForm(DepartmentForm::class);
+
         $queryBuilder = $repository->getWithSearchQueryBuilder($q);
         $pagination = $paginator->paginate(
             $queryBuilder, /* query NOT result */
@@ -430,9 +432,21 @@ class ActivityAdminController extends AbstractController
             10/*limit per page*/
         );
 
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $staffType = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($staffType);
+            $em->flush();
+            $this->addFlash('success', sprintf('Departamet adaugat!, %s', $this->getUser()->getUserName()));
+            return $this->redirectToRoute('admin_department_list');
+        }
+
         return $this->render(
             'admin/departments/list.html.twig',[
                 'pagination' => $pagination,
+                'departmentForm' => $form->createView(),
+                'buttonText' => 'Adauga'
             ]
         );
     }
