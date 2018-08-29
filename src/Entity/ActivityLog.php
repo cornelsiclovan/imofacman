@@ -34,26 +34,26 @@ class ActivityLog
     private $intern;
 
     /**
-     * @Assert\NotBlank(groups={"for_owner_data_input", "for_user_data_input"})
+     * @Assert\NotBlank(groups={"for_owner_data_input", "for_property_data_input"})
      * @ORM\Column(type="string", length=255)
      */
     private $log;
 
     /**
-     * @Assert\NotBlank(groups={"for_owner_data_input", "for_user_data_input"})
+     * @Assert\NotBlank(groups={"for_owner_data_input", "for_property_data_input"})
      * @Assert\Range(min=0, minMessage="Va rugam introduceti o valoare pozitiva")
      * @ORM\Column(type="float", length=10)
      */
     private $duration;
 
     /**
-     * @Assert\NotBlank(groups={"for_owner_data_input", "for_user_data_input"})
+     * @Assert\NotBlank(groups={"for_owner_data_input", "for_property_data_input"})
      * @ORM\Column(type="string", length=255)
      */
     private $details;
 
     /**
-     * @Assert\NotBlank(groups={"for_owner_data_input", "for_user_data_input"})
+     * @Assert\NotBlank(groups={"for_owner_data_input", "for_property_data_input"})
      * @ORM\Column(type="string", length=255)
      */
     private $lunchBreak;
@@ -64,7 +64,7 @@ class ActivityLog
     private $staff;
 
     /**
-     * @Assert\NotBlank(groups={"for_owner_data_input", "for_user_data_input"})
+     * @Assert\NotBlank(groups={"for_owner_data_input", "for_property_data_input"})
      * @ORM\Column(type="date")
      */
     private $publishedAt;
