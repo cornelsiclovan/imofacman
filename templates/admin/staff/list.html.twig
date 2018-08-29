@@ -52,7 +52,7 @@
                                        id: employee.id,
                                    }) }}"
                                 >
-                                    <span class="fa fa-close" style="color:red"></span>
+                                    <span class="fa fa-trash" style="color:palevioletred; font-size:24px"></span>
                                 </a>
                             </td>
                         </tr>
@@ -80,8 +80,8 @@
                 e.preventDefault();
 
                 var $el = $(this).closest('tr');
-                $(this).find('.fa-close')
-                    .removeClass('fa-close')
+                $(this).find('.fa-trash')
+                    .removeClass('fa-trash')
                     .addClass('fa-spinner')
                     .addClass('fa-spin');
 

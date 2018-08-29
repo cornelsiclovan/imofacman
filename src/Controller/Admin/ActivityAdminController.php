@@ -493,4 +493,23 @@ class ActivityAdminController extends AbstractController
             ]
         );
     }
+
+    /**
+     * @Route("/department/{id}/delete", name="admin_department_delete")
+     * @Method("DELETE")
+     */
+    public function deleteDepartment($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $staffType = $em->getRepository(StaffType::class)->findOneBy(['id' =>$id]);
+
+        if(!$staffType){
+            throw $this->createNotFoundException('Acest angajat nu a fost gasit');
+        }
+
+        $em->remove($staffType);
+        $em->flush();
+
+        return new Response(null, 204);
+    }
 }
