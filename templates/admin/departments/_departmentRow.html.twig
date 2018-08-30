@@ -1,0 +1,16 @@
+<tr>
+    <th scope="row">{{ i }}</th>
+    <td>{{ department.type }}</td>
+    <td>{{ department.addDataFor }}</td>
+    <td><a href="{{ path('admin_department_edit', {'id': department.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
+    <td>
+        <a href="#"
+           class="btn btn-link btn-xs pull-right js-remove-department"
+           data-url="{{ path('admin_department_delete', {
+               id: department.id,
+           }) }}"
+        >
+            <span class="fa fa-trash" style="color:palevioletred; font-size:24px"></span>
+        </a>
+    </td>
+</tr>

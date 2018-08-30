@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
 
-            <div class="col-sm-12">
+            <div class="col-sm-12  js-activity-table">
                 <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
                     <a href="{{ path('admin_department_new') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
                 </div>
@@ -24,36 +24,28 @@
                         </div>
                     </div>
                 </form>
-                <table class="table table-striped js-activity-table">
-                    <tr>
-                        <td scope="col">#</td>
-                        <th scope="col">Nume departament</th>
-                        <th scope="col">Adauga informatii in functie de:</th>
-                    </tr>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td scope="col">#</td>
+                            <th scope="col">Nume departament</th>
+                            <th scope="col">Adauga informatii in functie de:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     {%  set i = 0 %}
                     {%  for department in pagination %}
                         {%  set i = i + 1 %}
-                        <tr>
-                            <th scope="row">{{ i }}</th>
-                            <td>{{ department.type }}</td>
-                            <td>{{ department.addDataFor }}</td>
-                            <td><a href="{{ path('admin_department_edit', {'id': department.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
-                            <td>
-                                <a href="#"
-                                   class="btn btn-link btn-xs pull-right js-remove-department"
-                                   data-url="{{ path('admin_department_delete', {
-                                       id: department.id,
-                                   }) }}"
-                                >
-                                    <span class="fa fa-trash" style="color:palevioletred; font-size:24px"></span>
-                                </a>
-                            </td>
-                        </tr>
+                        {{ include('admin/departments/_departmentRow.html.twig') }}
                     {% endfor %}
+                    </tbody>
                 </table>
 
                 {{ knp_pagination_render(pagination) }}
-                {{ include('admin/departments/_formInLine.html.twig') }}
+
+                <div class="js-new-activity-log-form-wrapper">
+                    {{ include('admin/departments/_formInLine.html.twig') }}
+                </div>
             </div>
         </div>
     </div>
@@ -65,8 +57,8 @@
 
     <script>
         jQuery(document).ready(function() {
-            var $table = $('.js-activity-table');
-            var activityLog = new ActivityLog($table);
+            var $wrapper = $('.js-activity-table');
+            var activityLog = new ActivityLog($wrapper);
         });
     </script>
 {% endblock %}
