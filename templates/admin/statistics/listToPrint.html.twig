@@ -1,0 +1,39 @@
+{% extends 'baseToPint.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12">
+                <h1>Raport pentru clientul {{ owner }} ({{ pagination|length }})</h1>
+                <table class="table table-striped">
+                    <tr>
+                        <td scope="col">#</td>
+                        <th scope="col">Data</th>
+                        <th scope="col">Departament</th>
+                        <th scope="col">Proprietari</th>
+                        <th scope="col">Proprietati</th>
+                        <th scope="col">Lucrare</th>
+                    </tr>
+                    {%  set i = 0 %}
+                    {%  for log in pagination %}
+                        {%  set i = i + 1 %}
+                        <tr>
+                            <th scope="row">{{ i }}</th>
+                            <td>{{ log.publishedAt|date('Y-m-d') }}</td>
+                            <td>{{ log.staff.staffType }}</td>
+                            <td>{{ owner}}</td>
+                            <td>{%  for p in log.property %}
+                                    {% if p in properties %}
+                                        {{ p }}
+                                        ,
+                                    {% endif %}
+                                {%  endfor %}</td>
+                            <td>{{ log.log }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -6,7 +6,7 @@
 
             <div class="col-sm-12">
                 <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
-                    <a href="{{ path('new_activity') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
+                    <a href="{{ path('admin_activity_per_owner_pdf', {'id' : owner.getId}) }}" class="btn btn-warning pull-right">Download<span class="fa fa-arrow-circle-o-down"></span></a>
                 </div>
                 <h1>Raport pentru clientul {{ owner }} ({{ pagination.getTotalItemCount }})</h1>
                 <form>
@@ -33,7 +33,6 @@
                         <th scope="col">Proprietati</th>
                         <th scope="col">Intern</th>
                         <th scope="col">Lucrare</th>
-                        <th scope="col">Durata (ore)</th>
                         <th scope="col">Observatii</th>
                         <th scope="col">Pauza de masa</th>
                     </tr>
@@ -53,13 +52,14 @@
                                 {%  endfor %}</td>
                             <td><input type="checkbox" {% if log.intern == true %} checked {% endif %}/></td>
                             <td>{{ log.log }}</td>
-                            <td>{{ log.duration }}</td>
                             <td>{{ log.details }}</td>
                             <td>{{ log.lunchBreak }}</td>
                             <td><a href="{{ path('edit_activity', {'id': log.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
                         </tr>
                     {% endfor %}
                 </table>
+
+                {{ knp_pagination_render(pagination) }}
             </div>
         </div>
     </div>

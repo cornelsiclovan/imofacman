@@ -25,34 +25,6 @@ class ActivityLogRepository extends ServiceEntityRepository
     /**
      * @param null|string $term
      */
-    public function getWithQueryBuilder(?string $term, Staff $staff): QueryBuilder
-    {
-        if($term != null) {
-            $qb = $this->createQueryBuilder('l')
-                ->innerJoin('l.staff', 's')
-                ->addSelect('s')
-                ->innerJoin('l.owner', 'o')
-                ->addSelect('o')
-                ->innerJoin('l.property', 'p')
-                ->addSelect('p');
-
-            if ($term) {
-                $qb->andWhere('l.log LIKE :term OR l.publishedAt LIKE :term OR l.details LIKE :term OR s.name LIKE :term OR o.name LIKE :term OR p.name LIKE :term')->setParameter('term', '%' . $term . '%');
-                $qb->andWhere('s.email LIKE :staff')->setParameter('staff', $staff->getEmail());
-            }
-            return $qb->orderBy('l.publishedAt', 'DESC');
-        }
-        else{
-            $qb = $this->createQueryBuilder('a')
-                ->andWhere('a.staff = :val')
-                ->setParameter('val', $staff);
-            return $qb->orderBy('a.publishedAt', 'DESC');
-        }
-    }
-
-    /**
-     * @param null|string $term
-     */
     public function getForOwnerWithQueryBuilder(?string $term, Staff $staff): QueryBuilder
     {
         if($term != null) {
@@ -80,6 +52,34 @@ class ActivityLogRepository extends ServiceEntityRepository
     /**
      * @param null|string $term
      */
+    public function getWithQueryBuilder(?string $term, Staff $staff): QueryBuilder
+    {
+        if($term != null) {
+            $qb = $this->createQueryBuilder('l')
+                ->innerJoin('l.staff', 's')
+                ->addSelect('s')
+                ->innerJoin('l.owner', 'o')
+                ->addSelect('o')
+                ->innerJoin('o.properties', 'p')
+                ->addSelect('p');
+
+            if ($term) {
+                $qb->andWhere('l.log LIKE :term OR l.publishedAt LIKE :term OR l.details LIKE :term OR s.name LIKE :term OR o.name LIKE :term OR p.name LIKE :term')->setParameter('term', '%' . $term . '%');
+                $qb->andWhere('s.email LIKE :staff')->setParameter('staff', $staff->getEmail());
+            }
+            return $qb->orderBy('l.publishedAt', 'DESC');
+        }
+        else{
+            $qb = $this->createQueryBuilder('a')
+                ->andWhere('a.staff = :val')
+                ->setParameter('val', $staff);
+            return $qb->orderBy('a.publishedAt', 'DESC');
+        }
+    }
+
+    /**
+     * @param null|string $term
+     */
     public function getWithSearchQueryBuilder(?string $term, Owner $owner): QueryBuilder
     {
         if($term != null) {
@@ -88,13 +88,14 @@ class ActivityLogRepository extends ServiceEntityRepository
                 ->addSelect('s')
                 ->innerJoin('l.owner', 'o')
                 ->addSelect('o')
-                ->innerJoin('l.property', 'p')
-                ->addSelect('p')
                 ->innerJoin('s.staffType', 't')
-                ->addSelect('t');
+                ->addSelect('t')
+                ->innerJoin('o.properties', 'p')
+                ->addSelect('p')
+            ;
 
             if ($term) {
-                $qb->andWhere('l.log LIKE :term OR l.publishedAt LIKE :term OR l.details LIKE :term OR s.name LIKE :term OR o.name LIKE :term OR p.name LIKE :term OR t.type LIKE :term')->setParameter('term', '%' . $term . '%');
+                $qb->andWhere('l.log LIKE :term OR l.publishedAt LIKE :term OR l.details LIKE :term OR s.name LIKE :term OR o.name LIKE :term OR t.type LIKE :term OR p.name LIKE :term')->setParameter('term', '%' . $term . '%');
                 $qb->andWhere('o.email LIKE :owner')->setParameter('owner', $owner->getEmail());
             }
             return $qb->orderBy('l.publishedAt', 'DESC');

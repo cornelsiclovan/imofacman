@@ -25,7 +25,9 @@ use App\Repository\StaffRepository;
 use App\Repository\StaffTypeRepository;
 use App\Service\HashPasswordListener;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Component\Pager\PaginatorInterface;
+use Knp\Snappy\Pdf;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -40,9 +42,11 @@ use Symfony\Component\HttpFoundation\Response;
 class ActivityAdminController extends AbstractController
 {
     private $listener;
+    private $pdf;
 
-    public function __construct(HashPasswordListener $listener)
+    public function __construct(HashPasswordListener $listener, Pdf $pdf)
     {
+        $this->pdf = $pdf;
         $this->listener = $listener;
     }
 
@@ -275,6 +279,7 @@ class ActivityAdminController extends AbstractController
         $propertyRepositoy = $em->getRepository(Property::class);
         $properties = $propertyRepositoy->findBy(['owner'=>$owner]);
 
+
         return $this->render(
             'admin/statistics/list.html.twig', [
                 'owner' => $owner,
@@ -282,6 +287,45 @@ class ActivityAdminController extends AbstractController
                 'properties' => $properties
             ]
         );
+    }
+
+
+    /**
+     * @Route("/statistics/{id}/pdf", name="admin_activity_per_owner_pdf")
+     */
+    public function listActivityToPdf(ActivityLogRepository $repository, Request $request, PaginatorInterface $paginator, Owner $owner, EntityManagerInterface $em)
+    {
+        $q = $request->query->get('q');
+
+        $queryBuilder = $repository->getWithSearchQueryBuilder($q, $owner);
+
+        $pagination = $queryBuilder->getQuery()->getResult();
+
+
+        $propertyRepositoy = $em->getRepository(Property::class);
+        $properties = $propertyRepositoy->findBy(['owner'=>$owner]);
+
+
+        $html = $this->render('admin/statistics/listToPrint.html.twig', [
+            'owner' => $owner,
+            'pagination' => $pagination,
+            'properties' => $properties
+            ]
+        );
+
+
+
+            $pdf = $this->pdf->getOutputFromHtml(
+                $html
+            );
+
+
+
+        return new PdfResponse(
+           $pdf,
+           $owner.'-'.date('D M Y').'.pdf'
+        );
+
     }
 
     /**

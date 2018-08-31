@@ -5,3 +5,6 @@ twig:
     form_themes:
       - bootstrap_3_layout.html.twig
       - _formTheme.html.twig
+    globals:
+        pathToWeb: "%kernel.root_dir%/../"
+
