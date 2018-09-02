@@ -1,6 +1,6 @@
 'use strict';
 
-(function(window, $) {
+(function(window, $, swal) {
     window.ActivityLog = function ($wrapper) {
         this.$wrapper = $wrapper;
         this.helper = new Helper($wrapper);
@@ -27,6 +27,21 @@
             e.preventDefault();
 
             var $link = $(e.currentTarget);
+            var self = this;
+            swal({
+                title: 'Sterg acest departament?',
+                showCancelButton: true
+            }).then(
+                function () {
+                    self._deleteActivityLog($link);
+                },
+                function () {
+
+                }
+            );
+        },
+
+        _deleteActivityLog: function($link){
             var $el = $link.closest('tr');
 
             $link.find('.fa-trash')
@@ -38,12 +53,15 @@
             $.ajax({
                 url: $link.data('url'),
                 method: 'DELETE',
-                success: function(){
-                    $el.remove();
-                    self.updateTotalLogsNumberOnRemove();
-                },
-                error: function(jqXHR){
+            }).then(function(){
+                $el.remove();
+                self.updateTotalLogsNumberOnRemove();
+            }).catch(function(jqXHR){
+                if(typeof jqXHR.responseText === 'undefined'){
+                    throw jqXHR;
                 }
+            }).catch(function(e){
+                console.log(e);
             });
         },
 
@@ -128,4 +146,4 @@
 
 
 
-})(window, jQuery);
+})(window, jQuery, swal);
