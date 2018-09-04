@@ -117,6 +117,52 @@ class ActivityController extends AbstractController
         );
     }
 
+
+    /**
+     * @Route("/activity/new/multiple", name="new_activity_multiple")
+     */
+    public function newMultipleActivity(Request $request)
+    {
+        $bool = false;
+        if($this->getUser()->getStaffType()->getAddDataFor() == 'Proprietar') {
+            $form = $this->createForm(ActivityOwnerForm::class);
+            $bool = true;
+        }else{
+            $form = $this->createForm(ActivityForm::class);
+        }
+
+        //only handles data on POST
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $activityLog = $form->getData();
+
+            $activityLog->setStaff($this->getUser());
+
+            $properties = $activityLog->getProperty();
+            foreach($properties as $property) {
+                dump($property->getOwner());
+                $activityLog->addOwner($property->getOwner());
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($activityLog);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                sprintf('Activitate adaugata!, %s', $this->getUser()->getUserName())
+            );
+            return $this->redirectToRoute('user_activity_list');
+        }
+        return $this->render(
+            'activity/newMultiple.html.twig',
+            [
+                'activityForm' => $form->createView(),
+                'user_is_owner' => $bool
+            ]
+        );
+    }
+
     /**
      * @Route("/activity/log/{id}/edit", name="edit_activity")
      */
