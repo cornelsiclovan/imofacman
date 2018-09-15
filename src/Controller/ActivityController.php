@@ -245,16 +245,25 @@ class ActivityController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $activityLog = $em->getRepository('App:ActivityLog')
             ->find($activityLogId);
+
+
         if(!$activityLog){
             throw $this->createNotFoundException('Acest log nu a fost gasit');
+
         }
+
         $property = $em->getRepository('App:Property')
             ->find($propertyId);
+
+        $owner = $property->getOwner();
+
         if(!$property){
             throw $this->createNotFoundException('Acest proprietar nu a fost gasit');
         }
 
         $activityLog->removeProperty($property);
+        $activityLog->removeOwner($owner);
+
         $em->persist($activityLog);
         $em->flush();
 
