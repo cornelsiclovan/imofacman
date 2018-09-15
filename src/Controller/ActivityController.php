@@ -94,7 +94,6 @@ class ActivityController extends AbstractController
 
             $properties = $activityLog->getProperty();
             foreach($properties as $property) {
-                dump($property->getOwner());
                 $activityLog->addOwner($property->getOwner());
             }
 
@@ -140,7 +139,6 @@ class ActivityController extends AbstractController
 
             $properties = $activityLog->getProperty();
             foreach($properties as $property) {
-                dump($property->getOwner());
                 $activityLog->addOwner($property->getOwner());
             }
 
@@ -247,7 +245,7 @@ class ActivityController extends AbstractController
             ->find($activityLogId);
 
 
-        if(!$activityLog){
+        if (!$activityLog) {
             throw $this->createNotFoundException('Acest log nu a fost gasit');
 
         }
@@ -257,13 +255,23 @@ class ActivityController extends AbstractController
 
         $owner = $property->getOwner();
 
-        if(!$property){
+        if (!$property) {
             throw $this->createNotFoundException('Acest proprietar nu a fost gasit');
         }
 
         $activityLog->removeProperty($property);
-        $activityLog->removeOwner($owner);
 
+        $bool = true;
+
+        $remainingProperties = $activityLog->getProperty();
+        foreach ($remainingProperties as $remainingProperty) {
+            if ($remainingProperty->getOwner() === $property->getOwner()) {
+                $bool = false;
+            }
+        }
+        if ($bool){
+            $activityLog->removeOwner($owner);
+        }
         $em->persist($activityLog);
         $em->flush();
 
