@@ -88,8 +88,6 @@ class ActivityLog
         return $this->id;
     }
 
-
-
     /**
      * @Assert\Collection(
      *     fields={
@@ -201,6 +199,7 @@ class ActivityLog
     {
         return $this->getStaff()->getName();
     }
+
 
     public function getPublishedAt(): ?\DateTimeInterface
     {
