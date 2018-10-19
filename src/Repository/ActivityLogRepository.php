@@ -96,15 +96,15 @@ class ActivityLogRepository extends ServiceEntityRepository
 
             if ($term) {
                 $qb->andWhere('l.log LIKE :term OR l.publishedAt LIKE :term OR l.details LIKE :term OR s.name LIKE :term OR o.name LIKE :term OR t.type LIKE :term OR p.name LIKE :term')->setParameter('term', '%' . $term . '%');
-                $qb->andWhere('o.email LIKE :owner')->setParameter('owner', $owner->getEmail());
+                $qb->andWhere('o.id LIKE :owner')->setParameter('owner', $owner->getId());
             }
             return $qb->orderBy('l.publishedAt', 'DESC');
         }
         else{
             $qb = $this->createQueryBuilder('a')
                 ->innerJoin('a.owner', 'o')
-                ->andWhere('o.email LIKE :val')
-                ->setParameter('val', $owner->getEmail());
+                ->andWhere('o.id LIKE :val')
+                ->setParameter('val', $owner->getId());
             return $qb->orderBy('a.publishedAt', 'DESC');
         }
     }
