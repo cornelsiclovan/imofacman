@@ -1,12 +1,33 @@
 {% extends '/activity/formLayout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{asset('css/jquery.datepick.css')}}">
+{% endblock %}
+
 {% block body %}
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <h1>Introduceti activitate efectuata:</h1>
+                <h1>Introduceti activitate efectuata repetitiv:</h1>
 
                 {{ include ('/activity/_formMultiple.html.twig', {'buttonText': 'Adaugă'})}}
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.plugin.js')}}" ></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.datepick.js')}}"></script>
+
+    <script>
+        $('.js-datepicker').datepick({
+            multiSelect: 2, showTrigger: '#calImg'});
+
+        var dates = $('.js-datepicker').datepick('getDate');
+        window.alert(dates);
+    </script>
 {% endblock %}

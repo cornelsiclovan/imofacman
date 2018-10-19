@@ -10,7 +10,9 @@ namespace App\Controller;
 use App\Entity\ActivityLog;
 use App\Entity\ActivityLogProperty;
 use App\Form\ActivityForm;
+use App\Form\ActivityFormMultiple;
 use App\Form\ActivityOwnerForm;
+use App\Form\ActivityOwnerFormMultiple;
 use App\Repository\ActivityLogRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Proxies\__CG__\App\Entity\Property;
@@ -94,7 +96,6 @@ class ActivityController extends AbstractController
 
             $properties = $activityLog->getProperty();
             foreach($properties as $property) {
-                dump($property->getOwner());
                 $activityLog->addOwner($property->getOwner());
             }
 
@@ -125,14 +126,19 @@ class ActivityController extends AbstractController
     {
         $bool = false;
         if($this->getUser()->getStaffType()->getAddDataFor() == 'Proprietar') {
-            $form = $this->createForm(ActivityOwnerForm::class);
+            $form = $this->createForm(ActivityOwnerFormMultiple::class);
             $bool = true;
         }else{
-            $form = $this->createForm(ActivityForm::class);
+            $form = $this->createForm(ActivityFormMultiple::class);
         }
 
+
         //only handles data on POST
+
         $form->handleRequest($request);
+
+
+
         if($form->isSubmitted() && $form->isValid()){
             $activityLog = $form->getData();
 
@@ -140,7 +146,6 @@ class ActivityController extends AbstractController
 
             $properties = $activityLog->getProperty();
             foreach($properties as $property) {
-                dump($property->getOwner());
                 $activityLog->addOwner($property->getOwner());
             }
 
@@ -154,6 +159,8 @@ class ActivityController extends AbstractController
             );
             return $this->redirectToRoute('user_activity_list');
         }
+
+
         return $this->render(
             'activity/newMultiple.html.twig',
             [
@@ -245,16 +252,35 @@ class ActivityController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $activityLog = $em->getRepository('App:ActivityLog')
             ->find($activityLogId);
-        if(!$activityLog){
+
+
+        if (!$activityLog) {
             throw $this->createNotFoundException('Acest log nu a fost gasit');
+
         }
+
         $property = $em->getRepository('App:Property')
             ->find($propertyId);
-        if(!$property){
+
+        $owner = $property->getOwner();
+
+        if (!$property) {
             throw $this->createNotFoundException('Acest proprietar nu a fost gasit');
         }
 
         $activityLog->removeProperty($property);
+
+        $bool = true;
+
+        $remainingProperties = $activityLog->getProperty();
+        foreach ($remainingProperties as $remainingProperty) {
+            if ($remainingProperty->getOwner() === $property->getOwner()) {
+                $bool = false;
+            }
+        }
+        if ($bool){
+            $activityLog->removeOwner($owner);
+        }
         $em->persist($activityLog);
         $em->flush();
 
