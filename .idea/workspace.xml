@@ -2,32 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="569f6ec0-1112-434e-bd97-45bf54407c0d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Form/ActivityFormMentainanceBoss.php" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Entity/ActivityLogProperty.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Migrations/Version20180809123938.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Migrations/Version20180810082930.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Migrations/Version20180812091233.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Migrations/Version20180813085213.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Migrations/Version20180823094714.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Migrations/Version20180827120002.php" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/imofacman.iml" afterPath="$PROJECT_DIR$/.idea/imofacman.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/php.xml" afterPath="$PROJECT_DIR$/.idea/php.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.lock" afterPath="$PROJECT_DIR$/composer.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/ActivityController.php" afterPath="$PROJECT_DIR$/src/Controller/ActivityController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/ActivityLog.php" afterPath="$PROJECT_DIR$/src/Entity/ActivityLog.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Form/ActivityForm.php" afterPath="$PROJECT_DIR$/src/Form/ActivityForm.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Form/ActivityOwnerForm.php" afterPath="$PROJECT_DIR$/src/Form/ActivityOwnerForm.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Form/StaffEditForm.php" afterPath="$PROJECT_DIR$/src/Form/StaffEditForm.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Form/StaffForm.php" afterPath="$PROJECT_DIR$/src/Form/StaffForm.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Repository/ActivityLogRepository.php" afterPath="$PROJECT_DIR$/src/Repository/ActivityLogRepository.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Repository/StaffRepository.php" afterPath="$PROJECT_DIR$/src/Repository/StaffRepository.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/symfony.lock" afterPath="$PROJECT_DIR$/symfony.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/activity/_form.html.twig" afterPath="$PROJECT_DIR$/templates/activity/_form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/activity/homepage.html.twig" afterPath="$PROJECT_DIR$/templates/activity/homepage.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/activity/new.html.twig" afterPath="$PROJECT_DIR$/templates/activity/new.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/admin/staff/_form.html.twig" afterPath="$PROJECT_DIR$/templates/admin/staff/_form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/admin/statistics/list.html.twig" afterPath="$PROJECT_DIR$/templates/admin/statistics/list.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base.html.twig" afterPath="$PROJECT_DIR$/templates/base.html.twig" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Entity/ActivityLogProperty.php" />
     </list>
     <ignored path="$PROJECT_DIR$/vendor/composer/" />
     <ignored path="$PROJECT_DIR$/vendor/doctrine/annotations/" />
@@ -154,7 +129,7 @@
         <entry file="file://$PROJECT_DIR$/src/Repository/ActivityLogRepository.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-309">
-              <caret line="100" column="32" lean-forward="true" selection-start-line="100" selection-start-column="32" selection-end-line="100" selection-end-column="32" />
+              <caret line="100" column="32" lean-forward="false" selection-start-line="100" selection-start-column="32" selection-end-line="100" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -337,6 +312,12 @@
               <item name="imofacman" type="b2602c69:ProjectViewProjectNode" />
               <item name="imofacman" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Entity" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="imofacman" type="b2602c69:ProjectViewProjectNode" />
+              <item name="imofacman" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="Form" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -388,12 +369,12 @@
       <option name="presentableId" value="Default" />
       <updated>1540194161692</updated>
       <workItem from="1540194163036" duration="2685000" />
-      <workItem from="1540197040179" duration="20871000" />
+      <workItem from="1540197040179" duration="21485000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23556000" />
+    <option name="totallyTimeSpent" value="24170000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -838,7 +819,7 @@
     <entry file="file://$PROJECT_DIR$/src/Repository/ActivityLogRepository.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-309">
-          <caret line="100" column="32" lean-forward="true" selection-start-line="100" selection-start-column="32" selection-end-line="100" selection-end-column="32" />
+          <caret line="100" column="32" lean-forward="false" selection-start-line="100" selection-start-column="32" selection-end-line="100" selection-end-column="32" />
           <folding />
         </state>
       </provider>
