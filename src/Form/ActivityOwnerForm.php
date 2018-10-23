@@ -8,7 +8,9 @@
 
 namespace App\Form;
 use App\Entity\ActivityLog;
+use App\Entity\ActivityType;
 use App\Entity\Owner;
+use App\Entity\Staff;
 use App\Repository\OwnerRepository;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -22,11 +24,8 @@ class ActivityOwnerForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('intern', ChoiceType::class,[
-            'choices' => [
-                'Da' => true,
-                'Nu' => false
-            ]
+        $builder->add('type', EntityType::class,[
+            'class' => ActivityType::class,
         ])
             ->add('log')
             ->add('duration')

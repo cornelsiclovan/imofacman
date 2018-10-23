@@ -20,7 +20,6 @@ class ActivityLog
     private $id;
 
 
-
     /**
      * @Assert\NotBlank(groups={"for_owner_data_input"})
      * @ORM\ManyToMany(targetEntity="App\Entity\Owner", inversedBy="activityLogs")
@@ -28,10 +27,6 @@ class ActivityLog
      */
     private $owner;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $intern;
 
     /**
      * @Assert\NotBlank(groups={"for_owner_data_input", "for_property_data_input"})
@@ -47,14 +42,12 @@ class ActivityLog
     private $duration;
 
     /**
-     * @Assert\NotBlank(groups={"for_owner_data_input", "for_property_data_input"})
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $details;
 
     /**
-     * @Assert\NotBlank(groups={"for_owner_data_input", "for_property_data_input"})
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lunchBreak;
 
@@ -75,6 +68,11 @@ class ActivityLog
      * @Assert\NotBlank(groups={"for_property_data_input"})
      */
     private $property;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ActivityType", inversedBy="activityLogs")
+     */
+    private $type;
 
 
     public function __construct()
@@ -123,17 +121,6 @@ class ActivityLog
         return $this;
     }
 
-    public function getIntern(): ?bool
-    {
-        return $this->intern;
-    }
-
-    public function setIntern(bool $intern): self
-    {
-        $this->intern = $intern;
-
-        return $this;
-    }
 
     public function getLog(): ?string
     {
@@ -164,7 +151,7 @@ class ActivityLog
         return $this->details;
     }
 
-    public function setDetails(string $details): self
+    public function setDetails(?string $details): self
     {
         $this->details = $details;
 
@@ -176,7 +163,7 @@ class ActivityLog
         return $this->lunchBreak;
     }
 
-    public function setLunchBreak(string $lunchBreak): self
+    public function setLunchBreak(string $lunchBreak = " "): self
     {
         $this->lunchBreak = $lunchBreak;
 
@@ -244,6 +231,18 @@ class ActivityLog
         if ($this->property->contains($property)) {
             $this->property->removeElement($property);
         }
+
+        return $this;
+    }
+
+    public function getType(): ?ActivityType
+    {
+        return $this->type;
+    }
+
+    public function setType(?ActivityType $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

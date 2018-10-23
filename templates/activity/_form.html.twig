@@ -1,11 +1,5 @@
 {{ form_start(activityForm) }}
-    {{ form_row(activityForm.intern, {'label' : 'Intern'}) }}
-    {{ form_row(activityForm.log, {
-        'label' : 'Lucrare',
-    })
-    }}
-    {{ form_row(activityForm.duration, {'label' : 'Durata (ore)'}) }}
-    {{ form_row(activityForm.details, {'label' : 'Observatii'}) }}
+    {{ form_row(activityForm.publishedAt, {'label' : 'Data'}) }}
 
     {% if user_is_owner %}
         {{ form_row(activityForm.owner ,{'label': 'Proprietari'}) }}
@@ -15,8 +9,28 @@
         {{ form_row(activityForm.property, {'label' : 'Proprietati'}) }}
     {% endif %}
 
-    {{ form_row(activityForm.lunchBreak, {'label' : 'Pauza de masa'}) }}
-    {{ form_row(activityForm.publishedAt, {'label' : 'Data'}) }}
+    {% if user_is_mentainance_boss %}
+        {{ form_row(activityForm.staff, {
+            'label' : 'Introdu lucrare pentru',
+        })
+        }}
+    {% endif %}
+
+     {{ form_row(activityForm.log, {
+         'label' : 'Lucrare',
+     })
+     }}
+
+    {{ form_row(activityForm.duration, {'label' : 'Durata (ore)'}) }}
+    {{ form_row(activityForm.type, {'label' : 'Tip activitate'}) }}
+
+
+    {{ form_row(activityForm.details, {'label' : 'Observatii'}) }}
+
+
+
+    {#{{ form_row(activityForm.lunchBreak, {'label' : 'Pauza de masa'}) }}#}
+
     <button type = "submit" class="btn btn-success" formnovalidate>{{ buttonText }}</button>
 
 {{ form_end(activityForm) }}

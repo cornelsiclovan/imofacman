@@ -13,6 +13,8 @@ use App\Entity\Owner;
 use App\Entity\Property;
 use App\Entity\Staff;
 use App\Repository\OwnerRepository;
+use App\Repository\StaffRepository;
+use Doctrine\ORM\EntityRepository;
 use Proxies\__CG__\App\Entity\StaffType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -24,13 +26,13 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ActivityForm extends AbstractType
+class ActivityFormMentainanceBoss extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('type', EntityType::class,[
-                'class' => ActivityType::class
-            ])
+            'class' => ActivityType::class
+        ])
             ->add('log')
             ->add('duration')
             ->add('details')
@@ -38,6 +40,12 @@ class ActivityForm extends AbstractType
                 'multiple'=>true,
                 'class' => Property::class,
                 'expanded' => true
+            ])
+            ->add('staff', EntityType::class, [
+                'class' => Staff::class,
+                'query_builder' => function(StaffRepository $repo){
+                    return $repo->createMentainanceTeamQueryBuilder();
+                }
             ])
             //->add('property', CollectionType::class,[
             //    'entry_type' => LogPropertyEmbededForm::class

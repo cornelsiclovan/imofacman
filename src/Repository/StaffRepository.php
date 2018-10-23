@@ -37,6 +37,16 @@ class StaffRepository extends ServiceEntityRepository
         return $qb->orderBy('s.name', 'DESC');
 
     }
+
+    public function createMentainanceTeamQueryBuilder(){
+        $qb = $this->createQueryBuilder('s')
+            ->andWhere('s.roles LIKE :param')
+            ->setParameter('param', '%ROLE_MENTAINANCE_TEAM%')
+            ->orWhere('s.roles LIKE :param2')
+            ->setParameter('param2', '%ROLE_MENTAINANCE_BOSS%');
+
+        return $qb;
+    }
 //    /**
 //     * @return Staff[] Returns an array of Staff objects
 //     */

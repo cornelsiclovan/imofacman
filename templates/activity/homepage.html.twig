@@ -6,7 +6,7 @@
 
             <div class="col-sm-12">
                 <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
-                    <a href="{{ path('new_activity_multiple') }}" style="margin-left: 5px" class="btn btn-success pull-right">Adauga multiplu<span class="fa fa-plus-circle"></span></a>
+                    <!--<a href="{{ path('new_activity_multiple') }}" style="margin-left: 5px" class="btn btn-success pull-right">Adauga multiplu<span class="fa fa-plus-circle"></span></a>-->
 
                     <a href="{{ path('new_activity') }}" class="btn btn-primary pull-right">Adauga <span class="fa fa-plus-circle"></span></a>
 
@@ -42,11 +42,10 @@
                             <th scope="col">Proprietari</th>
                         {% endif %}
 
-                        <th scope="col">Intern</th>
+                        <th scope="col">Tip lucrare</th>
                         <th scope="col">Lucrare</th>
                         <th scope="col">Durata (ore)</th>
                         <th scope="col">Observatii</th>
-                        <th scope="col">Pauza de masa</th>
                     </tr>
                     {%  set i = 0 %}
                     {%  for activity in pagination %}
@@ -95,11 +94,10 @@
                                 {% endfor %}
                             </td>
                             {% endif %}
-                            <td><input type="checkbox" {% if activity.intern == true %} checked {% endif %}/></td>
+                            <td>{{ activity.type }} </td>
                             <td>{{ activity.log }}</td>
                             <td>{{ activity.duration }}</td>
                             <td>{{ activity.details }}</td>
-                            <td>{{ activity.lunchBreak }}</td>
                             <td><a href="{{ path('edit_activity', {'id': activity.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
                         </tr>
 

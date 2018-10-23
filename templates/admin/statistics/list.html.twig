@@ -31,10 +31,9 @@
                         <th scope="col">Departament</th>
                         <th scope="col">Proprietari</th>
                         <th scope="col">Proprietati</th>
-                        <th scope="col">Intern</th>
+                        <th scope="col">Tip lucrare</th>
                         <th scope="col">Lucrare</th>
                         <th scope="col">Observatii</th>
-                        <th scope="col">Pauza de masa</th>
                     </tr>
                     {%  set i = 0 %}
                     {%  for log in pagination %}
@@ -50,10 +49,9 @@
                                         ,
                                     {% endif %}
                                 {%  endfor %}</td>
-                            <td><input type="checkbox" {% if log.intern == true %} checked {% endif %}/></td>
+                            <td>{{ log.type }}</td>
                             <td>{{ log.log }}</td>
                             <td>{{ log.details }}</td>
-                            <td>{{ log.lunchBreak }}</td>
                             <td><a href="{{ path('edit_activity', {'id': log.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a></td>
                         </tr>
                     {% endfor %}

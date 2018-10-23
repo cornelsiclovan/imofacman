@@ -10,6 +10,7 @@ namespace App\Controller;
 use App\Entity\ActivityLog;
 use App\Entity\ActivityLogProperty;
 use App\Form\ActivityForm;
+use App\Form\ActivityFormMentainanceBoss;
 use App\Form\ActivityFormMultiple;
 use App\Form\ActivityOwnerForm;
 use App\Form\ActivityOwnerFormMultiple;
@@ -40,9 +41,11 @@ class ActivityController extends AbstractController
      */
     public function showActivityList(ActivityLogRepository $repository, Request $request, PaginatorInterface $paginator)
     {
+        $roles = $this->getUser()->getRoles();
         $q = $request->query->get('q');
-
-        if($this->getUser()->getStaffType()->getAddDataFor() != 'Proprietar')
+        if(in_array('ROLE_MENTAINANCE_BOSS', $roles)){
+            $queryBuilder = $repository->getForMantainanceBossQueryBuilder($q, $this->getUser());
+        }else if($this->getUser()->getStaffType()->getAddDataFor() != 'Proprietar')
             $queryBuilder = $repository->getWithQueryBuilder($q, $this->getUser());
         else
             $queryBuilder = $repository->getForOwnerWithQueryBuilder($q, $this->getUser());
@@ -80,11 +83,20 @@ class ActivityController extends AbstractController
     public function newActivity(Request $request)
     {
         $bool = false;
-        if($this->getUser()->getStaffType()->getAddDataFor() == 'Proprietar') {
+        $bool_mentainance_boss = false;
+
+        $roles = $this->getUser()->getRoles();
+        if(in_array('ROLE_MENTAINANCE_BOSS', $roles)){
+            $form = $this->createForm(ActivityFormMentainanceBoss::class);
+            $form->remove('lunchBreak');
+            $bool_mentainance_boss = true;
+        }else if($this->getUser()->getStaffType()->getAddDataFor() == 'Proprietar') {
             $form = $this->createForm(ActivityOwnerForm::class);
+            $form->remove('lunchBreak');
             $bool = true;
         }else{
             $form = $this->createForm(ActivityForm::class);
+            $form->remove('lunchBreak');
         }
 
         //only handles data on POST
@@ -92,7 +104,11 @@ class ActivityController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $activityLog = $form->getData();
 
-            $activityLog->setStaff($this->getUser());
+            //dump($activityLog);die();
+
+            if(!$bool_mentainance_boss){
+                $activityLog->setStaff($this->getUser());
+            }
 
             $properties = $activityLog->getProperty();
             foreach($properties as $property) {
@@ -113,7 +129,8 @@ class ActivityController extends AbstractController
           'activity/new.html.twig',
             [
               'activityForm' => $form->createView(),
-                'user_is_owner' => $bool
+                'user_is_owner' => $bool,
+                'user_is_mentainance_boss' => $bool_mentainance_boss
             ]
         );
     }
@@ -176,8 +193,15 @@ class ActivityController extends AbstractController
     public function editActivity(Request $request, ActivityLog $activityLog)
     {
         $bool = false;
-        if($this->getUser()->getStaffType()->getAddDataFor() == 'Proprietar') {
+        $bool_mentainance_boss = false;
+        $roles = $this->getUser()->getRoles();
+        if(in_array('ROLE_MENTAINANCE_BOSS', $roles)){
+            $form = $this->createForm(ActivityFormMentainanceBoss::class, $activityLog);
+            $form->remove('lunchBreak');
+            $bool_mentainance_boss = true;
+        }else if($this->getUser()->getStaffType()->getAddDataFor() == 'Proprietar') {
             $form = $this->createForm(ActivityOwnerForm::class, $activityLog);
+            $form->remove('lunchBreak');
             $bool = true;
         }else{
             $form = $this->createForm(ActivityForm::class, $activityLog);
@@ -213,7 +237,8 @@ class ActivityController extends AbstractController
 
         return $this->render('activity/edit.html.twig', [
             'activityForm' => $form->createView(),
-            'user_is_owner' => $bool
+            'user_is_owner' => $bool,
+            'user_is_mentainance_boss' => $bool_mentainance_boss
         ]);
 
     }

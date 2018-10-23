@@ -23,7 +23,9 @@ class StaffEditForm extends AbstractType
             ->add('roles', ChoiceType::class, array(
                 'choices' => array(
                     'Administrator' => 'ROLE_ADMIN',
-                    'Utilizator'    => 'ROLE_USER'
+                    'Utilizator'    => 'ROLE_USER',
+                    'Sef Departament Mentenanta' => 'ROLE_MENTAINANCE_BOSS',
+                    'Subordonat Departament Mentenanta' => 'ROLE_MENTAINANCE_TEAM'
                 ),
                 'multiple' => true,
             ));

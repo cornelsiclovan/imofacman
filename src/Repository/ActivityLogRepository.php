@@ -77,6 +77,35 @@ class ActivityLogRepository extends ServiceEntityRepository
         }
     }
 
+    public function getForMantainanceBossQueryBuilder(?string $term, Staff $staff): QueryBuilder
+    {
+        if($term != null) {
+            $qb = $this->createQueryBuilder('l')
+                ->innerJoin('l.staff', 's')
+                ->addSelect('s')
+                ->innerJoin('l.owner', 'o')
+                ->addSelect('o')
+                ->innerJoin('o.properties', 'p')
+                ->addSelect('p');
+
+            if ($term) {
+                $qb->andWhere('l.log LIKE :term OR l.publishedAt LIKE :term OR l.details LIKE :term OR s.name LIKE :term OR o.name LIKE :term OR p.name LIKE :term')->setParameter('term', '%' . $term . '%');
+                $qb->andWhere('s.roles LIKE :role')->setParameter('role', '%ROLE_MENTAINANCE_TEAM%');
+                $qb->orWhere('s.roles LIKE :role2')->setParameter('role2', '%ROLE_MENTAINANCE_BOSS%');
+            }
+            return $qb->orderBy('l.publishedAt', 'DESC');
+        }
+        else{
+            $qb = $this->createQueryBuilder('a')
+                ->innerJoin('a.staff', 's')
+                ->addSelect('s')
+                ->andWhere('s.roles LIKE :role')->setParameter('role', '%ROLE_MENTAINANCE_TEAM%')
+                ->orWhere('s.roles LIKE :role2')->setParameter('role2', '%ROLE_MENTAINANCE_BOSS%');
+            return $qb->orderBy('a.publishedAt', 'DESC');
+        }
+    }
+
+
     /**
      * @param null|string $term
      */
